@@ -38,20 +38,20 @@ public class TextView extends android.widget.TextView {
     private Locale mLocale;
 
     public TextView(Context context) {
-	super(context);
-	mLocale = context.getResources().getConfiguration().locale;
+        super(context);
+        mLocale = context.getResources().getConfiguration().locale;
     }
 
     public TextView(Context context, AttributeSet attrs) {
-	super(context, attrs);
-	mLocale = context.getResources().getConfiguration().locale;
-	parseAttrs(context, attrs);
+        super(context, attrs);
+        mLocale = context.getResources().getConfiguration().locale;
+        parseAttrs(context, attrs);
     }
 
     public TextView(Context context, AttributeSet attrs, int defStyle) {
-	super(context, attrs, defStyle);
-	mLocale = context.getResources().getConfiguration().locale;
-	parseAttrs(context, attrs);
+        super(context, attrs, defStyle);
+        mLocale = context.getResources().getConfiguration().locale;
+        parseAttrs(context, attrs);
     }
 
     /**
@@ -60,7 +60,7 @@ public class TextView extends android.widget.TextView {
      * @return A {@link float} that represent the scaling factor
      */
     public float getScaleLetterSpacing() {
-	return mScaleLetterSpacing;
+        return mScaleLetterSpacing;
     }
 
     /**
@@ -70,19 +70,32 @@ public class TextView extends android.widget.TextView {
      *            A {@link float}
      */
     public void setScaleLetterSpacing(float letterSpacing) {
-	this.mScaleLetterSpacing = letterSpacing;
-	applyLetterSpacing();
+        this.mScaleLetterSpacing = letterSpacing;
+        applyLetterSpacing();
+    }
+
+    /**
+     * Sets a text in this TextView respecting the xml attributes
+     * 
+     * @param text
+     *            A text
+     */
+    public void setCustomText(CharSequence text) {
+        setText(text, null);
     }
 
     @Override
     public void setText(CharSequence text, BufferType type) {
-	originalText = text;
-	applyLetterSpacing();
+        originalText = text;
+        if (toUpperCase)
+            setUpperCase();
+        else
+            applyLetterSpacing();
     }
 
     @Override
     public CharSequence getText() {
-	return originalText;
+        return originalText;
     }
 
     /**
@@ -90,64 +103,64 @@ public class TextView extends android.widget.TextView {
      * 
      */
     public void setUpperCase() {
-	originalText = originalText != null ? originalText.toString()
-		.toUpperCase(mLocale) : null;
-	applyLetterSpacing();
+        originalText = originalText != null ? originalText.toString()
+                .toUpperCase(mLocale) : null;
+        applyLetterSpacing();
     }
 
     private void applyLetterSpacing() {
-	if (mScaleLetterSpacing == 0) {
-	    super.setText(originalText, BufferType.SPANNABLE);
-	    return;
-	}
-	StringBuilder builder = new StringBuilder();
-	for (int i = 0; i < originalText.length(); i++) {
-	    builder.append(originalText.charAt(i));
-	    if (i + 1 < originalText.length()) {
-		builder.append("\u00A0");
-	    }
-	}
-	SpannableString finalText = new SpannableString(builder.toString());
-	if (builder.toString().length() > 1) {
-	    for (int i = 1; i < builder.toString().length(); i += 2) {
-		finalText.setSpan(new ScaleXSpan(mScaleLetterSpacing), i,
-			i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-	    }
-	}
-	super.setText(finalText, BufferType.SPANNABLE);
+        if (mScaleLetterSpacing == 0) {
+            super.setText(originalText, BufferType.SPANNABLE);
+            return;
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < originalText.length(); i++) {
+            builder.append(originalText.charAt(i));
+            if (i + 1 < originalText.length()) {
+                builder.append("\u00A0");
+            }
+        }
+        SpannableString finalText = new SpannableString(builder.toString());
+        if (builder.toString().length() > 1) {
+            for (int i = 1; i < builder.toString().length(); i += 2) {
+                finalText.setSpan(new ScaleXSpan(mScaleLetterSpacing), i,
+                        i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        super.setText(finalText, BufferType.SPANNABLE);
     }
 
     @SuppressLint("InlinedApi")
     private void parseAttrs(Context context, AttributeSet attrs) {
-	TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-		R.styleable.TextView, 0, 0);
-	int set[] = { android.R.attr.text };
-	TypedArray aa = context.obtainStyledAttributes(attrs, set);
-	try {
-	    mScaleLetterSpacing = a.getFloat(
-		    R.styleable.TextView_scaleTracking, 0f);
-	    originalText = aa.getText(0);
-	    toUpperCase = a.getBoolean(R.styleable.TextView_toUpperCase, false);
-	    typeFaceName = a.getString(R.styleable.TextView_typeface);
-	} finally {
-	    a.recycle();
-	    aa.recycle();
-	}
-	setCustomFont(context);
-	if (toUpperCase)
-	    originalText = originalText != null ? originalText.toString()
-		    .toUpperCase(mLocale) : null;
-	applyLetterSpacing();
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
+                R.styleable.TextView, 0, 0);
+        int set[] = { android.R.attr.text };
+        TypedArray aa = context.obtainStyledAttributes(attrs, set);
+        try {
+            mScaleLetterSpacing = a.getFloat(
+                    R.styleable.TextView_scaleTracking, 0f);
+            originalText = aa.getText(0);
+            toUpperCase = a.getBoolean(R.styleable.TextView_toUpperCase, false);
+            typeFaceName = a.getString(R.styleable.TextView_typeface);
+        } finally {
+            a.recycle();
+            aa.recycle();
+        }
+        setCustomFont(context);
+        if (toUpperCase)
+            originalText = originalText != null ? originalText.toString()
+                    .toUpperCase(mLocale) : null;
+        applyLetterSpacing();
     }
 
     private void setCustomFont(Context ctx) {
-	if (typeFaceName != null) {
-	    setPaintFlags(this.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG
-		    | Paint.LINEAR_TEXT_FLAG);
-	    Typeface tf = Typefaces.get(ctx, typeFaceName);
-	    if (tf != null)
-		setTypeface(tf);
-	}
+        if (typeFaceName != null) {
+            setPaintFlags(this.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG
+                    | Paint.LINEAR_TEXT_FLAG);
+            Typeface tf = Typefaces.get(ctx, typeFaceName);
+            if (tf != null)
+                setTypeface(tf);
+        }
     }
 
     /**
@@ -160,8 +173,8 @@ public class TextView extends android.widget.TextView {
      *            folder
      */
     public void setCustomFont(Context ctx, String font) {
-	typeFaceName = font;
-	setCustomFont(ctx);
+        typeFaceName = font;
+        setCustomFont(ctx);
     }
 
     /**
@@ -170,6 +183,6 @@ public class TextView extends android.widget.TextView {
      * @return A {@link String} that represent the font filename
      */
     public String getCustomFont() {
-	return typeFaceName;
+        return typeFaceName;
     }
 }
