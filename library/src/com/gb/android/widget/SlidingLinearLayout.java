@@ -21,6 +21,7 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.nineoldandroids.animation.Animator;
@@ -35,25 +36,13 @@ import com.nineoldandroids.view.ViewHelper;
 public class SlidingLinearLayout extends LinearLayout {
 
     private static final String TAG = SlidingLinearLayout.class.getName();
-    private boolean mInitExpandedValue;
     private int mExpandedValue;
     private int mSlideOrientation;
     private int mDuration;
     private boolean mCollapsed;
-    //  private int mVisibility;
     private OnSlideListener mOnSlideListener = null;
     private android.view.ViewGroup.LayoutParams mLayoutParams;
     private android.view.ViewGroup.LayoutParams mOrigParams;
-
-    /**
-     * The amount of space used by children in the left gutter.
-     */
-    private int mLeftWidth;
-
-    /**
-     * The amount of space used by children in the right gutter.
-     */
-    private int mRightWidth;
 
     /**
      * The slide is animated in horizontal left direction
@@ -97,7 +86,6 @@ public class SlidingLinearLayout extends LinearLayout {
 
     public SlidingLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mInitExpandedValue = true;
         mAnimator = new ValueAnimator();
         parseAttrs(context, attrs);
     }
@@ -105,16 +93,15 @@ public class SlidingLinearLayout extends LinearLayout {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public SlidingLinearLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mInitExpandedValue = true;
         mAnimator = new ValueAnimator();
         parseAttrs(context, attrs);
     }
 
     /**
      * Returns the slide orientation for this view
-     *
+     * 
      * @return One of {@link #VERTICAL}, {@link #HORIZONTAL_LEFT},
-     * {@link #HORIZONTAL_RIGHT}.
+     *         {@link #HORIZONTAL_RIGHT}.
      */
     public int getSlideOrientation() {
         return mSlideOrientation;
@@ -122,9 +109,10 @@ public class SlidingLinearLayout extends LinearLayout {
 
     /**
      * Set the slide orientation for this view
-     *
-     * @param orientation One of {@link #VERTICAL}, {@link #HORIZONTAL_LEFT},
-     *                    {@link #HORIZONTAL_RIGHT}.
+     * 
+     * @param orientation
+     *            One of {@link #VERTICAL}, {@link #HORIZONTAL_LEFT},
+     *            {@link #HORIZONTAL_RIGHT}.
      */
     public void setSlideOrientation(int orientation) {
         mSlideOrientation = orientation;
@@ -134,7 +122,7 @@ public class SlidingLinearLayout extends LinearLayout {
 
     /**
      * How long this animation should last
-     *
+     * 
      * @return the duration in milliseconds of the animation
      */
     public int getDuration() {
@@ -143,8 +131,9 @@ public class SlidingLinearLayout extends LinearLayout {
 
     /**
      * How long this animation should last. The duration cannot be negative.
-     *
-     * @param duration Duration in milliseconds
+     * 
+     * @param duration
+     *            Duration in milliseconds
      */
     public void setDuration(int duration) {
         mDuration = duration;
@@ -156,8 +145,9 @@ public class SlidingLinearLayout extends LinearLayout {
      * Binds an animation listener to this animation. The animation listener is
      * notified of animation events such as the start of the animation or the
      * end of the animation.
-     *
-     * @param listener the animation listener to be notified
+     * 
+     * @param listener
+     *            the animation listener to be notified
      */
     public void setOnSlideListener(OnSlideListener listener) {
         mOnSlideListener = listener;
@@ -171,18 +161,18 @@ public class SlidingLinearLayout extends LinearLayout {
         mLayoutParams = getLayoutParams();
     }
 
-
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        boolean mExpandedValuePresent;
-        if (mSlideOrientation == VERTICAL)
-            mExpandedValuePresent = (getHeight() != 0);
-        else
-            mExpandedValuePresent = (getWidth() != 0);
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        Log.d(TAG, "onLayout: " + getHeight());
 
-        if (mInitExpandedValue && mExpandedValuePresent) {
-            Log.d(TAG, "onmeasure" + getHeight() + ":" + mCollapsed);
+        boolean validExpandedValue;
+        if (mSlideOrientation == VERTICAL)
+            validExpandedValue = (changed && mExpandedValue < getHeight());
+        else
+            validExpandedValue = (changed && mExpandedValue < getWidth());
+        if (validExpandedValue) {
+            Log.d(TAG, "onLayout: " + getHeight() + " : " + mCollapsed);
             if (mSlideOrientation == VERTICAL)
                 mExpandedValue = getHeight();
             else
@@ -193,10 +183,23 @@ public class SlidingLinearLayout extends LinearLayout {
                     mLayoutParams.height = 0;
                 else
                     mLayoutParams.width = 0;
+                Log.d(TAG, "mLayoutParams: " + mLayoutParams.height + " : "
+                        + mLayoutParams.width);
                 setLayoutParams(mLayoutParams);
             }
-            mInitExpandedValue = false;
         }
+    }
+
+    @Override
+    public void addView(View child) {
+        super.addView(child);
+        Log.d(TAG, "addView");
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        Log.d(TAG, "onMeasure");
     }
 
     /**
@@ -244,7 +247,8 @@ public class SlidingLinearLayout extends LinearLayout {
                     R.styleable.SlidingLinearLayout_slideOrientation, VERTICAL);
             mDuration = a.getInteger(R.styleable.SlidingLinearLayout_duration,
                     300);
-            mCollapsed = a.getBoolean(R.styleable.SlidingLinearLayout_collapsed, true);
+            mCollapsed = a.getBoolean(
+                    R.styleable.SlidingLinearLayout_collapsed, true);
         } finally {
             a.recycle();
         }

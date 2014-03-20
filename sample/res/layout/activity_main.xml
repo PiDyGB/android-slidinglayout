@@ -42,7 +42,7 @@ the License.
             android:id="@+id/slide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
             <com.gb.android.widget.TextView
                 android:layout_width="match_parent"
@@ -120,7 +120,7 @@ the License.
             <com.gb.android.widget.TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="My TrackingTextView"
+                android:text="My TrackingTextView che va su due meledettissime righe"
                 app:scaleTracking="1"
                 app:toUpperCase="true"
                 tools:ignore="HardcodedText" >
