@@ -44,13 +44,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
 
-        button = (Button) findViewById(R.id.button_open);
-
-        slidingLinearLayout = (SlidingLinearLayout) findViewById(R.id.slide);
-        slidingLinearLayout.setOnSlideListener(this);
-
-        button.setOnClickListener(this);
-
         ArrayList<PromotionalBannerItem> list = new ArrayList<PromotionalBannerItem>();
         for (int i = 0; i < 5; i++) {
             PromotionalBannerItem item = new PromotionalBannerItem();
@@ -65,6 +58,16 @@ public class MainActivity extends Activity implements OnClickListener,
         c.setBannerAction("action");
         c.setBackgroundColor(android.R.color.holo_red_dark);
         root.addView(c);
+
+        View v = getLayoutInflater().inflate(R.layout.item2, root, false);
+        root.addView(v);
+
+        button = (Button) v.findViewById(R.id.button_open);
+
+        slidingLinearLayout = (SlidingLinearLayout) v.findViewById(R.id.slide);
+        slidingLinearLayout.setOnSlideListener(this);
+
+        button.setOnClickListener(this);
     }
 
     @Override
@@ -81,7 +84,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
     @Override
     public void onSlideEnd(SlidingLinearLayout slidingLinearLayout) {
-        if (slidingLinearLayout.isShown())
+        if (slidingLinearLayout.isExpanded())
             button.setText("CLOSE");
         else
             button.setText("OPEN");
