@@ -12,12 +12,11 @@
 
     <include layout="@layout/generic_banner" />
 
-    <com.hm.goe.widget.SlidingLinearLayout
+    <com.gb.android.widget.SlidingLinearLayout
         android:id="@+id/promotionalSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
         hm:duration="200" />
 
 </LinearLayout>

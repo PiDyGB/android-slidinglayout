@@ -18,51 +18,77 @@ package com.gb.android.widget.sample;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.gb.android.widget.OnSlideListener;
 import com.gb.android.widget.SlidingLinearLayout;
 
-public class MainActivity extends Activity implements OnClickListener,
-	OnSlideListener {
+import java.util.ArrayList;
 
+public class MainActivity extends Activity implements OnClickListener,
+        OnSlideListener, PromotionalBannerComponent.OnPromotionalItemClickListener {
+
+    private static final String TAG = MainActivity.class.getName();
     private SlidingLinearLayout slidingLinearLayout;
     private Button button;
 
-    @SuppressLint("NewApi")
+    @SuppressLint({"NewApi", "ResourceAsColor"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-	button = (Button) findViewById(R.id.button_open);
+        LinearLayout root = (LinearLayout) findViewById(R.id.root);
 
-	slidingLinearLayout = (SlidingLinearLayout) findViewById(R.id.slide);
-	slidingLinearLayout.setOnSlideListener(this);
+        button = (Button) findViewById(R.id.button_open);
 
-	button.setOnClickListener(this);
+        slidingLinearLayout = (SlidingLinearLayout) findViewById(R.id.slide);
+        slidingLinearLayout.setOnSlideListener(this);
+
+        button.setOnClickListener(this);
+
+        ArrayList<PromotionalBannerItem> list = new ArrayList<PromotionalBannerItem>();
+        for (int i = 0; i < 5; i++) {
+            PromotionalBannerItem item = new PromotionalBannerItem();
+            item.setAction("action");
+            item.setPromotionText("text: " + i);
+            list.add(item);
+        }
+
+        PromotionalBannerComponent c = new PromotionalBannerComponent(this, list, this);
+        c.setBannerTitle("title");
+        c.setBannerSubtitle("subtitle");
+        c.setBannerAction("action");
+        c.setBackgroundColor(android.R.color.holo_red_dark);
+        root.addView(c);
     }
 
     @Override
     public void onClick(View v) {
-	slidingLinearLayout.slide();
+        slidingLinearLayout.slide();
 
     }
 
     @Override
     public void onSlideStart(SlidingLinearLayout slidingLinearLayout) {
-	// TODO Auto-generated method stub
+        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void onSlideEnd(SlidingLinearLayout slidingLinearLayout) {
-	if (slidingLinearLayout.isShown())
-	    button.setText("CLOSE");
-	else
-	    button.setText("OPEN");
+        if (slidingLinearLayout.isShown())
+            button.setText("CLOSE");
+        else
+            button.setText("OPEN");
     }
 
+    @Override
+    public void OnItemClickListener(PromotionalBannerItem item) {
+        Log.d(TAG, "click");
+    }
 }
