@@ -33,22 +33,20 @@ import com.nineoldandroids.view.ViewHelper;
  * A {@link LinearLayout} version with sliding animation implementation
  */
 public class SlidingLinearLayout extends LinearLayout {
-    
+
     public interface SlideListener {
 
         /**
          * Notifies the start of the slide animation.
-         * 
-         * @param slidingLinearLayout
-         *            An instance of {@link SlidingLinearLayout}
+         *
+         * @param slidingLinearLayout An instance of {@link SlidingLinearLayout}
          */
         public void onSlideStart(SlidingLinearLayout slidingLinearLayout);
 
         /**
          * Notifies the end of the slide animation.
-         * 
-         * @param slidingLinearLayout
-         *            An instance of {@link SlidingLinearLayout}
+         *
+         * @param slidingLinearLayout An instance of {@link SlidingLinearLayout}
          */
         public void onSlideEnd(SlidingLinearLayout slidingLinearLayout);
 
@@ -102,6 +100,12 @@ public class SlidingLinearLayout extends LinearLayout {
         }
     };
 
+    public SlidingLinearLayout(Context context) {
+        super(context);
+        this.setWillNotDraw(false);
+        mAnimator = new ValueAnimator();
+    }
+
     public SlidingLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setWillNotDraw(false);
@@ -119,9 +123,9 @@ public class SlidingLinearLayout extends LinearLayout {
 
     /**
      * Returns the slide orientation for this view
-     * 
+     *
      * @return One of {@link #VERTICAL}, {@link #HORIZONTAL_LEFT},
-     *         {@link #HORIZONTAL_RIGHT}.
+     * {@link #HORIZONTAL_RIGHT}.
      */
     public int getSlideOrientation() {
         return mSlideOrientation;
@@ -129,10 +133,9 @@ public class SlidingLinearLayout extends LinearLayout {
 
     /**
      * Set the slide orientation for this view
-     * 
-     * @param orientation
-     *            One of {@link #VERTICAL}, {@link #HORIZONTAL_LEFT},
-     *            {@link #HORIZONTAL_RIGHT}.
+     *
+     * @param orientation One of {@link #VERTICAL}, {@link #HORIZONTAL_LEFT},
+     *                    {@link #HORIZONTAL_RIGHT}.
      */
     public void setSlideOrientation(int orientation) {
         mSlideOrientation = orientation;
@@ -142,7 +145,7 @@ public class SlidingLinearLayout extends LinearLayout {
 
     /**
      * How long this animation should last
-     * 
+     *
      * @return the duration in milliseconds of the animation
      */
     public int getDuration() {
@@ -151,9 +154,8 @@ public class SlidingLinearLayout extends LinearLayout {
 
     /**
      * How long this animation should last. The duration cannot be negative.
-     * 
-     * @param duration
-     *            Duration in milliseconds
+     *
+     * @param duration Duration in milliseconds
      */
     public void setDuration(int duration) {
         mDuration = duration;
@@ -165,9 +167,8 @@ public class SlidingLinearLayout extends LinearLayout {
      * Binds an animation listener to this animation. The animation listener is
      * notified of animation events such as the start of the animation or the
      * end of the animation.
-     * 
-     * @param listener
-     *            the animation listener to be notified
+     *
+     * @param listener the animation listener to be notified
      */
     public void setSlideListener(SlideListener listener) {
         mOnSlideListener = listener;
@@ -175,7 +176,7 @@ public class SlidingLinearLayout extends LinearLayout {
 
     /**
      * Set the view in expanded mode or not.
-     * 
+     *
      * @param expanded a {@link boolean}
      */
     public void setExpanded(boolean expanded) {
@@ -193,7 +194,7 @@ public class SlidingLinearLayout extends LinearLayout {
 
     /**
      * Return if it's expanded
-     * 
+     *
      * @return a {@link boolean}
      */
     public boolean isExpanded() {
@@ -235,7 +236,7 @@ public class SlidingLinearLayout extends LinearLayout {
      */
     public void slide() {
         // Prepare ValueAnimator
-        
+
         if (!mExpanded)
             mAnimator.setIntValues(0, mExpandedValue);
         else
