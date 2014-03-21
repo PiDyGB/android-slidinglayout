@@ -18,6 +18,7 @@ package com.gb.android.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -34,13 +35,33 @@ import com.nineoldandroids.view.ViewHelper;
  * A {@link LinearLayout} version with sliding animation implementation
  */
 public class SlidingLinearLayout extends LinearLayout {
+    
+    public interface SlideListener {
+
+        /**
+         * Notifies the start of the slide animation.
+         * 
+         * @param slidingLinearLayout
+         *            An instance of {@link SlidingLinearLayout}
+         */
+        public void onSlideStart(SlidingLinearLayout slidingLinearLayout);
+
+        /**
+         * Notifies the end of the slide animation.
+         * 
+         * @param slidingLinearLayout
+         *            An instance of {@link SlidingLinearLayout}
+         */
+        public void onSlideEnd(SlidingLinearLayout slidingLinearLayout);
+
+    }
 
     private static final String TAG = SlidingLinearLayout.class.getName();
     private int mExpandedValue;
     private int mSlideOrientation;
     private int mDuration;
-    private boolean mCollapsed;
-    private OnSlideListener mOnSlideListener = null;
+    private boolean mExpanded;
+    private SlideListener mOnSlideListener = null;
     private android.view.ViewGroup.LayoutParams mLayoutParams;
     private android.view.ViewGroup.LayoutParams mOrigParams;
 
@@ -86,6 +107,7 @@ public class SlidingLinearLayout extends LinearLayout {
 
     public SlidingLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.setWillNotDraw(false);
         mAnimator = new ValueAnimator();
         parseAttrs(context, attrs);
     }
@@ -93,6 +115,7 @@ public class SlidingLinearLayout extends LinearLayout {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public SlidingLinearLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        this.setWillNotDraw(false);
         mAnimator = new ValueAnimator();
         parseAttrs(context, attrs);
     }
@@ -149,8 +172,35 @@ public class SlidingLinearLayout extends LinearLayout {
      * @param listener
      *            the animation listener to be notified
      */
-    public void setOnSlideListener(OnSlideListener listener) {
+    public void setSlideListener(SlideListener listener) {
         mOnSlideListener = listener;
+    }
+
+    /**
+     * Set the view in expanded mode or not.
+     * 
+     * @param expanded a {@link boolean}
+     */
+    public void setExpanded(boolean expanded) {
+        mExpanded = expanded;
+        if (!mExpanded) {
+            if (mSlideOrientation == VERTICAL)
+                mLayoutParams.height = 0;
+            else
+                mLayoutParams.width = 0;
+        } else {
+            mLayoutParams.height = mOrigParams.height;
+            mLayoutParams.width = mOrigParams.width;
+        }
+    }
+
+    /**
+     * Return if it's expanded
+     * 
+     * @return a {@link boolean}
+     */
+    public boolean isExpanded() {
+        return mExpanded;
     }
 
     @Override
@@ -165,27 +215,29 @@ public class SlidingLinearLayout extends LinearLayout {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         Log.d(TAG, "onLayout: " + getHeight());
+    }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        Log.d(TAG, "onDraw");
         boolean validExpandedValue;
         if (mSlideOrientation == VERTICAL)
-            validExpandedValue = (changed && mExpandedValue < getHeight());
+            validExpandedValue = (mExpandedValue < getHeight());
         else
-            validExpandedValue = (changed && mExpandedValue < getWidth());
+            validExpandedValue = (mExpandedValue < getWidth());
         if (validExpandedValue) {
-            Log.d(TAG, "onLayout: " + getHeight() + " : " + mCollapsed);
+            Log.d(TAG, "onDraw: " + getHeight() + " : " + mExpanded);
             if (mSlideOrientation == VERTICAL)
                 mExpandedValue = getHeight();
             else
                 mExpandedValue = getWidth();
 
-            if (mCollapsed) {
+            if (!mExpanded) {
                 if (mSlideOrientation == VERTICAL)
                     mLayoutParams.height = 0;
                 else
                     mLayoutParams.width = 0;
-                Log.d(TAG, "mLayoutParams: " + mLayoutParams.height + " : "
-                        + mLayoutParams.width);
-                setLayoutParams(mLayoutParams);
             }
         }
     }
@@ -207,14 +259,14 @@ public class SlidingLinearLayout extends LinearLayout {
      */
     public void slide() {
         // Prepare ValueAnimator
-        Log.d(TAG, "collapsed:" + mCollapsed);
+        Log.d(TAG, "collapsed:" + mExpanded);
 
-        if (mCollapsed)
+        if (!mExpanded)
             mAnimator.setIntValues(0, mExpandedValue);
         else
             mAnimator.setIntValues(mExpandedValue, 0);
 
-        mCollapsed = (mCollapsed == true) ? false : true;
+        mExpanded = (mExpanded == true) ? false : true;
 
         // Finish to setup animation and start it
         mAnimator.addListener(new AnimatorListenerAdapter() {
@@ -247,8 +299,8 @@ public class SlidingLinearLayout extends LinearLayout {
                     R.styleable.SlidingLinearLayout_slideOrientation, VERTICAL);
             mDuration = a.getInteger(R.styleable.SlidingLinearLayout_duration,
                     300);
-            mCollapsed = a.getBoolean(
-                    R.styleable.SlidingLinearLayout_collapsed, true);
+            mExpanded = a.getBoolean(R.styleable.SlidingLinearLayout_expanded,
+                    false);
         } finally {
             a.recycle();
         }

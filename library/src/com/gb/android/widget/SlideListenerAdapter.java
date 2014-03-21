@@ -15,7 +15,9 @@
  */
 package com.gb.android.widget;
 
-public abstract class OnSlideListenerAdapter implements OnSlideListener {
+import com.gb.android.widget.SlidingLinearLayout.SlideListener;
+
+public abstract class SlideListenerAdapter implements SlideListener {
 
     /*
      * (non-Javadoc)

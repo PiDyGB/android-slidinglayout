@@ -32,7 +32,7 @@ the License.
             <enum name="horizontal_right" value="1" />
             <enum name="vertical" value="2" />
         </attr>
-        <attr name="collapsed" format="boolean" />
+        <attr name="expanded" format="boolean" />
     </declare-styleable>
 
 </resources>

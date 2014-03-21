@@ -24,13 +24,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.gb.android.widget.OnSlideListener;
 import com.gb.android.widget.SlidingLinearLayout;
+import com.gb.android.widget.SlidingLinearLayout.SlideListener;
 
 import java.util.ArrayList;
 
 public class MainActivity extends Activity implements OnClickListener,
-        OnSlideListener, PromotionalBannerComponent.OnPromotionalItemClickListener {
+        SlideListener, PromotionalBannerComponent.OnPromotionalItemClickListener {
 
     private static final String TAG = MainActivity.class.getName();
     private SlidingLinearLayout slidingLinearLayout;
@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements OnClickListener,
         button = (Button) v.findViewById(R.id.button_open);
 
         slidingLinearLayout = (SlidingLinearLayout) v.findViewById(R.id.slide);
-        slidingLinearLayout.setOnSlideListener(this);
+        slidingLinearLayout.setSlideListener(this);
 
         button.setOnClickListener(this);
     }
@@ -84,7 +84,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
     @Override
     public void onSlideEnd(SlidingLinearLayout slidingLinearLayout) {
-        if (slidingLinearLayout.isExpanded())
+        if (slidingLinearLayout.isShown())
             button.setText("CLOSE");
         else
             button.setText("OPEN");
