@@ -21,8 +21,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.nineoldandroids.animation.Animator;
@@ -56,7 +54,6 @@ public class SlidingLinearLayout extends LinearLayout {
 
     }
 
-    private static final String TAG = SlidingLinearLayout.class.getName();
     private int mExpandedValue;
     private int mSlideOrientation;
     private int mDuration;
@@ -205,29 +202,20 @@ public class SlidingLinearLayout extends LinearLayout {
 
     @Override
     protected void onAttachedToWindow() {
-        Log.d(TAG, "onattachwindow");
         super.onAttachedToWindow();
         mOrigParams = getLayoutParams();
         mLayoutParams = getLayoutParams();
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-        Log.d(TAG, "onLayout: " + getHeight());
-    }
-
-    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d(TAG, "onDraw");
         boolean validExpandedValue;
         if (mSlideOrientation == VERTICAL)
             validExpandedValue = (mExpandedValue < getHeight());
         else
             validExpandedValue = (mExpandedValue < getWidth());
         if (validExpandedValue) {
-            Log.d(TAG, "onDraw: " + getHeight() + " : " + mExpanded);
             if (mSlideOrientation == VERTICAL)
                 mExpandedValue = getHeight();
             else
@@ -242,25 +230,12 @@ public class SlidingLinearLayout extends LinearLayout {
         }
     }
 
-    @Override
-    public void addView(View child) {
-        super.addView(child);
-        Log.d(TAG, "addView");
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.d(TAG, "onMeasure");
-    }
-
     /**
      * Display or hide this view with a sliding motion.
      */
     public void slide() {
         // Prepare ValueAnimator
-        Log.d(TAG, "collapsed:" + mExpanded);
-
+        
         if (!mExpanded)
             mAnimator.setIntValues(0, mExpandedValue);
         else
