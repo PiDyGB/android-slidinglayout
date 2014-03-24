@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:pixlui="http://schemas.android.com/apk/com.neopixl.pixlui"
-    xmlns:hm="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/banner"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <TextView
+    <com.gb.android.widget.TextView
         android:id="@+id/bannerTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,9 +17,10 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        app:typeface="Ubuntu-Regular.ttf" />
 
-    <TextView
+    <com.gb.android.widget.TextView
         android:id="@+id/bannerSubtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,9 +32,11 @@
         android:paddingRight="20dp"
         android:singleLine="false"
         android:textColor="@android:color/white"
-        android:textSize="11sp"/>
+        android:textSize="12sp"
+        app:typeface="Ubuntu-Regular.ttf" />
 
-    <Button
+    <com.gb.android.widget.Button
+        android:clickable="false"
         android:id="@+id/bannerAction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,10 +47,11 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textColor="@android:color/white"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        app:typeface="Ubuntu-Regular.ttf" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp" />
 
 </LinearLayout>

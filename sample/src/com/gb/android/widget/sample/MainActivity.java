@@ -18,80 +18,113 @@ package com.gb.android.widget.sample;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.gb.android.widget.Button;
 import com.gb.android.widget.SlidingLinearLayout;
 import com.gb.android.widget.SlidingLinearLayout.SlideListener;
 
 import java.util.ArrayList;
 
 public class MainActivity extends Activity implements OnClickListener,
-        SlideListener, PromotionalBannerComponent.OnPromotionalItemClickListener {
+	SlideListener, BannerComponent.OnPromotionalItemClickListener {
+    
+    private SlidingLinearLayout buttonSlidingLinearLayout;
+    private Button openTextViews;
+    private Button openButtons;
+    private SlidingLinearLayout textViewsSlidingLinearLayout;
 
-    private static final String TAG = MainActivity.class.getName();
-    private SlidingLinearLayout slidingLinearLayout;
-    private Button button;
-
-    @SuppressLint({"NewApi", "ResourceAsColor"})
+    @SuppressLint({ "NewApi", "ResourceAsColor" })
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_main);
 
-        LinearLayout root = (LinearLayout) findViewById(R.id.root);
+	LinearLayout root = (LinearLayout) findViewById(R.id.root);
 
-        ArrayList<PromotionalBannerItem> list = new ArrayList<PromotionalBannerItem>();
-        for (int i = 0; i < 5; i++) {
-            PromotionalBannerItem item = new PromotionalBannerItem();
-            item.setAction("action");
-            item.setPromotionText("text: " + i);
-            list.add(item);
-        }
+	ArrayList<BannerItem> list = new ArrayList<BannerItem>();
+	for (int i = 0; i < 5; i++) {
+	    BannerItem item = new BannerItem();
+	    item.setAction("action");
+	    item.setPromotionText("text: " + i);
+	    list.add(item);
+	}
 
-        PromotionalBannerComponent c = new PromotionalBannerComponent(this, list, this);
-        c.setBannerTitle("title");
-        c.setBannerSubtitle("subtitle");
-        c.setBannerAction("action");
-        c.setBackgroundColor(android.R.color.holo_red_dark);
-        root.addView(c);
+	BannerComponent c = new BannerComponent(this, list, this);
+	c.setBannerTitle("title");
+	c.setBannerSubtitle("subtitle");
+	c.setBannerAction("action");
+	c.setBackgroundColor(android.R.color.holo_red_dark);
+	root.addView(c);
 
-        View v = getLayoutInflater().inflate(R.layout.item2, root, false);
-        root.addView(v);
+	View v = getLayoutInflater().inflate(R.layout.textviews, root, false);
+	root.addView(v);
 
-        button = (Button) v.findViewById(R.id.button_open);
+	openTextViews = (Button) v.findViewById(R.id.button_open_textviews);
 
-        slidingLinearLayout = (SlidingLinearLayout) v.findViewById(R.id.slide);
-        slidingLinearLayout.setSlideListener(this);
+	textViewsSlidingLinearLayout = (SlidingLinearLayout) v
+		.findViewById(R.id.slideTextviews);
+	textViewsSlidingLinearLayout.setSlideListener(this);
 
-        button.setOnClickListener(this);
+	openTextViews.setOnClickListener(this);
+
+	View buttons = getLayoutInflater().inflate(R.layout.buttons, root,
+		false);
+	root.addView(buttons);
+	openButtons = (Button) buttons.findViewById(R.id.button_open_buttons);
+
+	buttonSlidingLinearLayout = (SlidingLinearLayout) buttons
+		.findViewById(R.id.slideButtons);
+	buttonSlidingLinearLayout.setSlideListener(this);
+	
+	openButtons.setOnClickListener(this);
+
+	View et = getLayoutInflater().inflate(R.layout.editexts, root, false);
+	root.addView(et);
     }
 
     @Override
     public void onClick(View v) {
-        slidingLinearLayout.slide();
+	switch (v.getId()) {
+	case R.id.button_open_buttons:
+	    buttonSlidingLinearLayout.slide();
+	    break;
 
+	case R.id.button_open_textviews:
+	    textViewsSlidingLinearLayout.slide();
+	    break;
+	}
     }
 
     @Override
     public void onSlideStart(SlidingLinearLayout slidingLinearLayout) {
-        // TODO Auto-generated method stub
+	// TODO Auto-generated method stub
 
     }
 
     @Override
     public void onSlideEnd(SlidingLinearLayout slidingLinearLayout) {
-        if (slidingLinearLayout.isShown())
-            button.setText("CLOSE");
-        else
-            button.setText("OPEN");
+	Button b = null;
+	switch (slidingLinearLayout.getId()) {
+	case R.id.slideButtons:
+	    b = openButtons;
+	    break;
+	case R.id.slideTextviews:
+	    b = openTextViews;
+	    break;
+	}
+	if (slidingLinearLayout.isExpanded())
+	    b.setText("CLOSE");
+	else
+	    b.setText("OPEN");
     }
 
     @Override
-    public void OnItemClickListener(PromotionalBannerItem item) {
-        Log.d(TAG, "click");
+    public void OnItemClickListener(BannerItem item) {
+	Toast.makeText(this, "Clicked: " + item.getPromotionText(),
+		Toast.LENGTH_SHORT).show();
     }
 }

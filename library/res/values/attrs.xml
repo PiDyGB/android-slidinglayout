@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 Copyright (C) 2014 Giuseppe Buzzanca
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -16,14 +17,21 @@ the License.
 <resources>
 
     <attr name="typeface" format="string" />
+    <attr name="scaleTracking" format="float" />
+    <attr name="toUpperCase" format="boolean" />
 
     <declare-styleable name="TextView">
-        <attr name="scaleTracking" format="float" />
+        <attr name="scaleTracking" />
         <attr name="typeface" />
-        <attr name="toUpperCase" format="boolean" />
+        <attr name="toUpperCase" />
     </declare-styleable>
     <declare-styleable name="EditText">
         <attr name="typeface" />
+    </declare-styleable>
+    <declare-styleable name="Button">
+        <attr name="scaleTracking" />
+        <attr name="typeface" />
+        <attr name="toUpperCase" />
     </declare-styleable>
     <declare-styleable name="SlidingLinearLayout">
         <attr name="duration" format="integer" />

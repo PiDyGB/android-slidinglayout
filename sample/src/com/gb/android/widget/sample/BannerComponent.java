@@ -1,10 +1,3 @@
-/**
- * HM
- * PromotionalBannerComponent.java
- *
- * Copyright (c) 2014 Accenture. All rights reserved.
- *
- */
 package com.gb.android.widget.sample;
 
 import java.util.ArrayList;
@@ -12,16 +5,16 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.gb.android.widget.Button;
 import com.gb.android.widget.SlidingLinearLayout;
+import com.gb.android.widget.TextView;
 
-public class PromotionalBannerComponent extends LinearLayout {
+public class BannerComponent extends LinearLayout {
 
-	private ArrayList<PromotionalBannerItem> mPromos;
+	private ArrayList<BannerItem> mPromos;
 	private Context mContext;
 	private SlidingLinearLayout mPromotionalSlider;
 	private LinearLayout mBanner;
@@ -34,15 +27,15 @@ public class PromotionalBannerComponent extends LinearLayout {
 	private static final String CLOSE_ACTION = "CLOSE";
 
 	public interface OnPromotionalItemClickListener {
-		void OnItemClickListener(PromotionalBannerItem item);
+		void OnItemClickListener(BannerItem item);
 	}
 
-	public PromotionalBannerComponent(Context context) {
+	public BannerComponent(Context context) {
 		super(context);
 	}
 
-	public PromotionalBannerComponent(Context context,
-			ArrayList<PromotionalBannerItem> promos,
+	public BannerComponent(Context context,
+			ArrayList<BannerItem> promos,
 			OnPromotionalItemClickListener itemClickListener) {
 		super(context);
 		mContext = context;
@@ -55,7 +48,7 @@ public class PromotionalBannerComponent extends LinearLayout {
 
 		LayoutInflater inflater = (LayoutInflater) mContext
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		addView(inflater.inflate(R.layout.promotional_banner, this, false));
+		addView(inflater.inflate(R.layout.banner, this, false));
 
 		mBanner = (LinearLayout) findViewById(R.id.banner);
 
@@ -71,7 +64,7 @@ public class PromotionalBannerComponent extends LinearLayout {
 					@Override
 					public void onClick(View v) {
 						if (mPromotionalSlider.getChildCount() > 0) {
-							if (mPromotionalSlider.isShown()) {
+							if (mPromotionalSlider.isExpanded()) {
 								mBannerAction.setText(mReceivedAction);
 							} else {
 								mBannerAction.setText(CLOSE_ACTION);
@@ -85,7 +78,7 @@ public class PromotionalBannerComponent extends LinearLayout {
 		for (int count = 0; count < mPromos.size(); count++) {
 
 			LinearLayout v = (LinearLayout) inflater
-					.inflate(R.layout.promotional_banner_item,
+					.inflate(R.layout.banner_item,
 							mPromotionalSlider, false);
 
 			FrameLayout itemContainer = (FrameLayout) v.getChildAt(0);
@@ -93,7 +86,7 @@ public class PromotionalBannerComponent extends LinearLayout {
 			((Button) itemContainer.getChildAt(0)).setText(mPromos.get(count)
 					.getPromotionText());
 
-			final PromotionalBannerItem bannerItem = mPromos.get(count);
+			final BannerItem bannerItem = mPromos.get(count);
 
 			itemContainer.setOnClickListener(new OnClickListener() {
 
