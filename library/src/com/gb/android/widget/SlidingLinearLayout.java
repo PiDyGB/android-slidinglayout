@@ -114,13 +114,11 @@ public class SlidingLinearLayout extends LinearLayout {
 
     public SlidingLinearLayout(Context context) {
 	super(context);
-	this.setWillNotDraw(false);
 	mAnimator = new ValueAnimator();
     }
 
     public SlidingLinearLayout(Context context, AttributeSet attrs) {
 	super(context, attrs);
-	this.setWillNotDraw(false);
 	mAnimator = new ValueAnimator();
 	parseAttrs(context, attrs);
     }
@@ -128,7 +126,6 @@ public class SlidingLinearLayout extends LinearLayout {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public SlidingLinearLayout(Context context, AttributeSet attrs, int defStyle) {
 	super(context, attrs, defStyle);
-	this.setWillNotDraw(false);
 	mAnimator = new ValueAnimator();
 	parseAttrs(context, attrs);
     }
