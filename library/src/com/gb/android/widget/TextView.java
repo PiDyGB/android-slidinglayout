@@ -138,9 +138,9 @@ public class TextView extends android.widget.TextView {
         TypedArray aa = context.obtainStyledAttributes(attrs, set);
         try {
             mScaleLetterSpacing = a.getFloat(
-                    R.styleable.TextView_scaleTracking, 0f);
+                    R.styleable.TextView_scale_tracking, 0f);
             originalText = aa.getText(0);
-            toUpperCase = a.getBoolean(R.styleable.TextView_toUpperCase, false);
+            toUpperCase = a.getBoolean(R.styleable.TextView_to_upper_case, false);
             typeFaceName = a.getString(R.styleable.TextView_typeface);
         } finally {
             a.recycle();

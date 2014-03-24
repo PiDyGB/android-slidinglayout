@@ -318,7 +318,7 @@ public class SlidingLinearLayout extends LinearLayout {
 		R.styleable.SlidingLinearLayout, 0, 0);
 	try {
 	    mSlideOrientation = a.getInteger(
-		    R.styleable.SlidingLinearLayout_slideOrientation, VERTICAL);
+		    R.styleable.SlidingLinearLayout_slide_orientation, VERTICAL);
 	    mDuration = a.getInteger(R.styleable.SlidingLinearLayout_duration,
 		    300);
 	    mExpanded = a.getBoolean(R.styleable.SlidingLinearLayout_expanded,

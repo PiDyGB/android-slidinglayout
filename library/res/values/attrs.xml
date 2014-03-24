@@ -17,25 +17,25 @@ the License.
 <resources>
 
     <attr name="typeface" format="string" />
-    <attr name="scaleTracking" format="float" />
-    <attr name="toUpperCase" format="boolean" />
+    <attr name="scale_tracking" format="float" />
+    <attr name="to_upper_case" format="boolean" />
 
     <declare-styleable name="TextView">
-        <attr name="scaleTracking" />
+        <attr name="scale_tracking" />
         <attr name="typeface" />
-        <attr name="toUpperCase" />
+        <attr name="to_upper_case" />
     </declare-styleable>
     <declare-styleable name="EditText">
         <attr name="typeface" />
     </declare-styleable>
     <declare-styleable name="Button">
-        <attr name="scaleTracking" />
+        <attr name="scale_tracking" />
         <attr name="typeface" />
-        <attr name="toUpperCase" />
+        <attr name="to_upper_case" />
     </declare-styleable>
     <declare-styleable name="SlidingLinearLayout">
         <attr name="duration" format="integer" />
-        <attr name="slideOrientation" format="enum">
+        <attr name="slide_orientation" format="enum">
             <enum name="horizontal_left" value="0" />
             <enum name="horizontal_right" value="1" />
             <enum name="vertical" value="2" />

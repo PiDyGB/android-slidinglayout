@@ -137,10 +137,10 @@ public class Button extends android.widget.Button {
 	int set[] = { android.R.attr.text };
 	TypedArray aa = context.obtainStyledAttributes(attrs, set);
 	try {
-	    mScaleLetterSpacing = a.getFloat(R.styleable.Button_scaleTracking,
+	    mScaleLetterSpacing = a.getFloat(R.styleable.Button_scale_tracking,
 		    0f);
 	    originalText = aa.getText(0);
-	    toUpperCase = a.getBoolean(R.styleable.Button_toUpperCase, false);
+	    toUpperCase = a.getBoolean(R.styleable.Button_to_upper_case, false);
 	    typeFaceName = a.getString(R.styleable.Button_typeface);
 	} finally {
 	    a.recycle();
