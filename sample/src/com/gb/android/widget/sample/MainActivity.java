@@ -71,19 +71,19 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	openTextViews.setOnClickListener(this);
 
-	View buttons = getLayoutInflater().inflate(R.layout.buttons, root,
-		false);
-	root.addView(buttons);
-	openButtons = (Button) buttons.findViewById(R.id.button_open_buttons);
+        View buttons = getLayoutInflater().inflate(R.layout.buttons, root,
+                false);
+        root.addView(buttons);
+        openButtons = (Button) buttons.findViewById(R.id.button_open_buttons);
 
-	buttonSlidingLinearLayout = (SlidingLinearLayout) buttons
-		.findViewById(R.id.slideButtons);
-	buttonSlidingLinearLayout.setSlideListener(this);
-	
-	openButtons.setOnClickListener(this);
+        buttonSlidingLinearLayout = (SlidingLinearLayout) buttons
+                .findViewById(R.id.slideButtons);
+        buttonSlidingLinearLayout.setSlideListener(this);
 
-	View et = getLayoutInflater().inflate(R.layout.editexts, root, false);
-	root.addView(et);
+        openButtons.setOnClickListener(this);
+
+        View et = getLayoutInflater().inflate(R.layout.editexts, root, false);
+        root.addView(et);
     }
 
     @Override
