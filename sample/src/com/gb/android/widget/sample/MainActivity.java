@@ -59,30 +59,30 @@ public class MainActivity extends Activity implements OnClickListener,
 	c.setBackgroundColor(android.R.color.holo_red_dark);
 	root.addView(c);
 
-//	View v = getLayoutInflater().inflate(R.layout.textviews, root, false);
-//	root.addView(v);
-//
-//	openTextViews = (Button) v.findViewById(R.id.button_open_textviews);
-//
-//	textViewsSlidingLinearLayout = (SlidingLinearLayout) v
-//		.findViewById(R.id.slideTextviews);
-//	textViewsSlidingLinearLayout.setSlideListener(this);
-//
-//	openTextViews.setOnClickListener(this);
-//
-//        View buttons = getLayoutInflater().inflate(R.layout.buttons, root,
-//                false);
-//        root.addView(buttons);
-//        openButtons = (Button) buttons.findViewById(R.id.button_open_buttons);
-//
-//        buttonSlidingLinearLayout = (SlidingLinearLayout) buttons
-//                .findViewById(R.id.slideButtons);
-//        buttonSlidingLinearLayout.setSlideListener(this);
-//
-//        openButtons.setOnClickListener(this);
-//
-//        View et = getLayoutInflater().inflate(R.layout.editexts, root, false);
-//        root.addView(et);
+	View v = getLayoutInflater().inflate(R.layout.textviews, root, false);
+	root.addView(v);
+
+	openTextViews = (Button) v.findViewById(R.id.button_open_textviews);
+
+	textViewsSlidingLinearLayout = (SlidingLinearLayout) v
+		.findViewById(R.id.slideTextviews);
+	textViewsSlidingLinearLayout.setSlideListener(this);
+
+	openTextViews.setOnClickListener(this);
+
+        View buttons = getLayoutInflater().inflate(R.layout.buttons, root,
+                false);
+        root.addView(buttons);
+        openButtons = (Button) buttons.findViewById(R.id.button_open_buttons);
+
+        buttonSlidingLinearLayout = (SlidingLinearLayout) buttons
+                .findViewById(R.id.slideButtons);
+        buttonSlidingLinearLayout.setSlideListener(this);
+
+        openButtons.setOnClickListener(this);
+
+        View et = getLayoutInflater().inflate(R.layout.editexts, root, false);
+        root.addView(et);
     }
 
     @Override
