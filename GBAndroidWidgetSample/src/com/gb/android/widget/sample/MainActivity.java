@@ -21,16 +21,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.gb.android.widget.Button;
 import com.gb.android.widget.SlidingLinearLayout;
 import com.gb.android.widget.SlidingLinearLayout.SlideListener;
 
-import java.util.ArrayList;
-
 public class MainActivity extends Activity implements OnClickListener,
-	SlideListener, BannerComponent.OnPromotionalItemClickListener {
+	SlideListener {
     
     private SlidingLinearLayout buttonSlidingLinearLayout;
     private Button openTextViews;
@@ -43,21 +40,6 @@ public class MainActivity extends Activity implements OnClickListener,
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_main);
 	LinearLayout root = (LinearLayout) findViewById(R.id.root);
-
-	ArrayList<BannerItem> list = new ArrayList<BannerItem>();
-	for (int i = 0; i < 5; i++) {
-	    BannerItem item = new BannerItem();
-	    item.setAction("action");
-	    item.setPromotionText("text: " + i);
-	    list.add(item);
-	}
-
-	BannerComponent c = new BannerComponent(this, list, this);
-	c.setBannerTitle("title");
-	c.setBannerSubtitle("subtitle");
-	c.setBannerAction("action");
-	c.setBackgroundColor(android.R.color.holo_red_dark);
-	root.addView(c);
 
 	View v = getLayoutInflater().inflate(R.layout.textviews, root, false);
 	root.addView(v);
@@ -119,11 +101,5 @@ public class MainActivity extends Activity implements OnClickListener,
 	    b.setText("CLOSE");
 	else
 	    b.setText("OPEN");
-    }
-
-    @Override
-    public void OnItemClickListener(BannerItem item) {
-	Toast.makeText(this, "Clicked: " + item.getPromotionText(),
-		Toast.LENGTH_SHORT).show();
     }
 }
