@@ -19,17 +19,13 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.Transformation;
 import android.widget.LinearLayout;
-
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorListenerAdapter;
-import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
-import com.nineoldandroids.view.ViewHelper;
 
 /**
  * A {@link LinearLayout} version with sliding animation implementation
@@ -38,21 +34,21 @@ public class SlidingLinearLayout extends LinearLayout {
 
     public interface SlideListener {
 
-	/**
-	 * Notifies the start of the slide animation.
-	 * 
-	 * @param slidingLinearLayout
-	 *            An instance of {@link SlidingLinearLayout}
-	 */
-	public void onSlideStart(SlidingLinearLayout slidingLinearLayout);
+        /**
+         * Notifies the start of the slide animation.
+         * 
+         * @param slidingLinearLayout
+         *            An instance of {@link SlidingLinearLayout}
+         */
+        public void onSlideStart(SlidingLinearLayout slidingLinearLayout);
 
-	/**
-	 * Notifies the end of the slide animation.
-	 * 
-	 * @param slidingLinearLayout
-	 *            An instance of {@link SlidingLinearLayout}
-	 */
-	public void onSlideEnd(SlidingLinearLayout slidingLinearLayout);
+        /**
+         * Notifies the end of the slide animation.
+         * 
+         * @param slidingLinearLayout
+         *            An instance of {@link SlidingLinearLayout}
+         */
+        public void onSlideEnd(SlidingLinearLayout slidingLinearLayout);
 
     }
 
@@ -62,76 +58,39 @@ public class SlidingLinearLayout extends LinearLayout {
     private boolean mExpanded;
     private boolean isSliding;
     private SlideListener mOnSlideListener = null;
-    private android.view.ViewGroup.LayoutParams mLayoutParams;
-    private android.view.ViewGroup.LayoutParams mOrigParams;
+    private int layoutHeight;
+    private int layoutWidth;
 
     /**
      * The slide is animated in horizontal left direction
      * <p/>
      * Constant Value: 0 (0x00000000)
      */
-    public static final int HORIZONTAL_LEFT = 0;
-    /**
-     * The slide is animated in horizontal right direction
-     * <p/>
-     * Constant Value: 1 (0x00000001)
-     */
-    public static final int HORIZONTAL_RIGHT = 1;
+    public static final int HORIZONTAL = 0;
     /**
      * The slide is animated in vertical direction
      * <p/>
      * Constant Value: 2 (0x00000002)
      */
     public static final int VERTICAL = 2;
-    private static final String INSTANCESTATE_KEY = SlidingLinearLayout.class
-	    .getName() + ".INSTANCESTATE_KEY";
-    private static final String SLIDEORIENTATION_KEY = SlidingLinearLayout.class
-	    .getName() + ".SLIDEORIENTATION_KEY";
-    private static final String DURATION_KEY = SlidingLinearLayout.class
-	    .getName() + ".DURATION_KEY";
-    private static final String EXPANDED_KEY = SlidingLinearLayout.class
-	    .getName() + ".EXPANDED_KEY";
-    private ValueAnimator mAnimator;
-
-    private AnimatorUpdateListener mAnimatorUpdateListener = new AnimatorUpdateListener() {
-
-	@Override
-	public void onAnimationUpdate(ValueAnimator animation) {
-	    int mValue = (Integer) animation.getAnimatedValue();
-	    if (mSlideOrientation == VERTICAL) {
-		mLayoutParams.height = mValue;
-	    } else if (mSlideOrientation == HORIZONTAL_LEFT) {
-		mLayoutParams.width = mValue;
-
-	    } else if (mSlideOrientation == HORIZONTAL_RIGHT) {
-		mLayoutParams.width = mValue;
-		ViewHelper.setX(SlidingLinearLayout.this,
-			Float.valueOf(mExpandedValue - mValue));
-	    }
-
-	    setLayoutParams(mLayoutParams);
-	}
-    };
+    private static final String TAG = SlidingLinearLayout.class.getName();
 
     public SlidingLinearLayout(Context context) {
-	super(context);
-	mAnimator = new ValueAnimator();
-	isSliding = false;
+        super(context);
+        isSliding = false;
     }
 
     public SlidingLinearLayout(Context context, AttributeSet attrs) {
-	super(context, attrs);
-	mAnimator = new ValueAnimator();
-	isSliding = false;
-	parseAttrs(context, attrs);
+        super(context, attrs);
+        isSliding = false;
+        parseAttrs(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public SlidingLinearLayout(Context context, AttributeSet attrs, int defStyle) {
-	super(context, attrs, defStyle);
-	mAnimator = new ValueAnimator();
-	isSliding = false;
-	parseAttrs(context, attrs);
+        super(context, attrs, defStyle);
+        isSliding = false;
+        parseAttrs(context, attrs);
     }
 
     /**
@@ -141,7 +100,7 @@ public class SlidingLinearLayout extends LinearLayout {
      *         {@link #HORIZONTAL_RIGHT}.
      */
     public int getSlideOrientation() {
-	return mSlideOrientation;
+        return mSlideOrientation;
     }
 
     /**
@@ -152,9 +111,9 @@ public class SlidingLinearLayout extends LinearLayout {
      *            {@link #HORIZONTAL_RIGHT}.
      */
     public void setSlideOrientation(int orientation) {
-	mSlideOrientation = orientation;
-	invalidate();
-	requestLayout();
+        mSlideOrientation = orientation;
+        invalidate();
+        requestLayout();
     }
 
     /**
@@ -163,7 +122,7 @@ public class SlidingLinearLayout extends LinearLayout {
      * @return the duration in milliseconds of the animation
      */
     public int getDuration() {
-	return mDuration;
+        return mDuration;
     }
 
     /**
@@ -173,9 +132,9 @@ public class SlidingLinearLayout extends LinearLayout {
      *            Duration in milliseconds
      */
     public void setDuration(int duration) {
-	mDuration = duration;
-	invalidate();
-	requestLayout();
+        mDuration = duration;
+        invalidate();
+        requestLayout();
     }
 
     /**
@@ -187,7 +146,7 @@ public class SlidingLinearLayout extends LinearLayout {
      *            the animation listener to be notified
      */
     public void setSlideListener(SlideListener listener) {
-	mOnSlideListener = listener;
+        mOnSlideListener = listener;
     }
 
     /**
@@ -197,9 +156,9 @@ public class SlidingLinearLayout extends LinearLayout {
      *            a {@link boolean}
      */
     public void setExpanded(boolean expanded) {
-	mExpanded = expanded;
-	invalidate();
-	requestLayout();
+        mExpanded = expanded;
+        invalidate();
+        requestLayout();
     }
 
     /**
@@ -208,127 +167,206 @@ public class SlidingLinearLayout extends LinearLayout {
      * @return a {@link boolean}
      */
     public boolean isExpanded() {
-	return mExpanded;
+        return mExpanded;
     }
 
     @Override
     protected void onAttachedToWindow() {
-	super.onAttachedToWindow();
-	mOrigParams = getLayoutParams();
-	mLayoutParams = getLayoutParams();
-    }
-
-    @Override
-    protected Parcelable onSaveInstanceState() {
-	Bundle b = new Bundle();
-	b.putParcelable(INSTANCESTATE_KEY, super.onSaveInstanceState());
-	b.putInt(SLIDEORIENTATION_KEY, mSlideOrientation);
-	b.putInt(DURATION_KEY, mDuration);
-	b.putBoolean(EXPANDED_KEY, mExpanded);
-	return b;
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-	if (state instanceof Bundle) {
-	    Bundle b = (Bundle) state;
-	    state = b.getParcelable(INSTANCESTATE_KEY);
-	    mSlideOrientation = b.getInt(SLIDEORIENTATION_KEY);
-	    mDuration = b.getInt(DURATION_KEY);
-	    mExpanded = b.getBoolean(EXPANDED_KEY);
-	}
-	super.onRestoreInstanceState(state);
+        super.onAttachedToWindow();
+        layoutHeight = getLayoutParams().height;
+        layoutWidth = getLayoutParams().width;
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-	super.onLayout(changed, l, t, r, b);
-	int tot = 0;
-	for (int i = 0; i < getChildCount(); i++) {
-	    View v = getChildAt(i);
-	    if (v.getVisibility() != GONE) {
-		LayoutParams lp = (LayoutParams) v.getLayoutParams();
-		if (mSlideOrientation == VERTICAL) {
-		    tot = tot + v.getHeight() + lp.bottomMargin + lp.topMargin;
-		    lp.height = v.getHeight();
-		} else {
-		    tot = tot + v.getWidth() + lp.leftMargin + lp.rightMargin;
-		    lp.width = v.getWidth();
-		}
-	    }
-	}
+        if (!isSliding) {
+            super.onLayout(changed, l, t, r, b);
 
-	if (mSlideOrientation == VERTICAL)
-	    mExpandedValue = tot + getPaddingBottom() + getPaddingTop();
-	else
-	    mExpandedValue = tot + getPaddingLeft() + getPaddingRight();
+            int tot = 0;
+            for (int i = 0; i < getChildCount(); i++) {
+                View v = getChildAt(i);
+                if (v.getVisibility() != GONE) {
+                    LayoutParams lp = (LayoutParams) v.getLayoutParams();
+                    if (mSlideOrientation == VERTICAL) {
+                        tot = tot + v.getHeight() + lp.bottomMargin
+                                + lp.topMargin;
+                        lp.height = v.getHeight();
+                    } else {
+                        tot = tot + v.getWidth() + lp.leftMargin
+                                + lp.rightMargin;
+                        lp.width = v.getWidth();
+                    }
+                }
+            }
+
+            if (mSlideOrientation == VERTICAL)
+                mExpandedValue = tot + getPaddingBottom() + getPaddingTop();
+            else
+                mExpandedValue = tot + getPaddingLeft() + getPaddingRight();
+            if (!mExpanded)
+                setVisibility(GONE);
+            Log.d(TAG, "onLayout:" + getId() + ":" + mExpandedValue + ":"
+                    + mExpanded);
+        }
+
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-	super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-	if (!mExpanded && !isSliding) {
-	    if (mSlideOrientation == VERTICAL)
-		setMeasuredDimension(getMeasuredWidth(), 0);
-	    else
-		setMeasuredDimension(0, getMeasuredHeight());
-	}
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (!isSliding)
+            if (!mExpanded) {
+                if (mSlideOrientation == VERTICAL)
+                    setMeasuredDimension(getMeasuredWidth(), 0);
+                else
+                    setMeasuredDimension(0, getMeasuredHeight());
+                Log.d(TAG, "onMeasure");
+            }
     }
 
     /**
      * Display or hide this view with a sliding motion.
      */
     public void slide() {
-	// Prepare ValueAnimator
-	if (isSliding)
-	    return;
-	isSliding = true;
-
-	if (!mExpanded)
-	    mAnimator.setIntValues(0, mExpandedValue);
-	else
-	    mAnimator.setIntValues(mExpandedValue, 0);
-
-	mExpanded = (mExpanded == true) ? false : true;
-
-	// Finish to setup animation and start it
-	mAnimator.addListener(new AnimatorListenerAdapter() {
-
-	    @Override
-	    public void onAnimationStart(Animator animation) {
-		if (mOnSlideListener != null)
-		    mOnSlideListener.onSlideStart(SlidingLinearLayout.this);
-	    }
-
-	    @Override
-	    public void onAnimationEnd(Animator animation) {
-		isSliding = false;
-		setLayoutParams(mOrigParams);
-		if (mOnSlideListener != null)
-		    mOnSlideListener.onSlideEnd(SlidingLinearLayout.this);
-	    }
-	});
-	mAnimator.addUpdateListener(mAnimatorUpdateListener);
-	mAnimator.setDuration(mDuration);
-	mAnimator.start();
+        Log.d(TAG, "slide:" + getId() + ":" + mExpanded);
+        if (mExpanded)
+            collapse();
+        else
+            expand();
     }
 
     private void parseAttrs(Context context, AttributeSet attrs) {
-	mExpandedValue = 0;
+        mExpandedValue = 0;
 
-	TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-		R.styleable.SlidingLinearLayout, 0, 0);
-	try {
-	    mSlideOrientation = a
-		    .getInteger(
-			    R.styleable.SlidingLinearLayout_slide_orientation,
-			    VERTICAL);
-	    mDuration = a.getInteger(R.styleable.SlidingLinearLayout_duration,
-		    300);
-	    mExpanded = a.getBoolean(R.styleable.SlidingLinearLayout_expanded,
-		    false);
-	} finally {
-	    a.recycle();
-	}
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
+                R.styleable.SlidingLinearLayout, 0, 0);
+        try {
+            mSlideOrientation = a
+                    .getInteger(
+                            R.styleable.SlidingLinearLayout_slide_orientation,
+                            VERTICAL);
+            mDuration = a.getInteger(R.styleable.SlidingLinearLayout_duration,
+                    300);
+            mExpanded = a.getBoolean(R.styleable.SlidingLinearLayout_expanded,
+                    false);
+        } finally {
+            a.recycle();
+        }
+    }
+
+    public void collapse() {
+        Log.d(TAG, "Collapse:" + mExpandedValue);
+        if (isSliding)
+            return;
+
+        isSliding = true;
+
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime,
+                    Transformation t) {
+                if (interpolatedTime == 1) {
+                    SlidingLinearLayout.this.setVisibility(GONE);
+                } else {
+                    if (mSlideOrientation == VERTICAL)
+                        SlidingLinearLayout.this.getLayoutParams().height = mExpandedValue
+                                - (int) (mExpandedValue * interpolatedTime);
+                    else
+                        SlidingLinearLayout.this.getLayoutParams().width = mExpandedValue
+                                - (int) (mExpandedValue * interpolatedTime);
+
+                    SlidingLinearLayout.this.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // 1dp per milliseconds
+        a.setDuration(mDuration);
+        a.setAnimationListener(new AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                if (mOnSlideListener != null)
+                    mOnSlideListener.onSlideStart(SlidingLinearLayout.this);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isSliding = false;
+                mExpanded = (mExpanded == true) ? false : true;
+                if (mOnSlideListener != null)
+                    mOnSlideListener.onSlideEnd(SlidingLinearLayout.this);
+            }
+        });
+        this.startAnimation(a);
+    }
+
+    public void expand() {
+        Log.d(TAG, "Expand:" + getId() + ":" + mExpandedValue + ":" + isSliding);
+        if (isSliding)
+            return;
+
+        isSliding = true;
+
+        this.getLayoutParams().height = 0;
+        this.setVisibility(View.VISIBLE);
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime,
+                    Transformation t) {
+                Log.d(TAG, "apply: "
+                        + getId()
+                        + ":"
+                        + (interpolatedTime == 1 ? layoutHeight
+                                : (int) (mExpandedValue * interpolatedTime)));
+                if (mSlideOrientation == VERTICAL) {
+                    SlidingLinearLayout.this.getLayoutParams().height = interpolatedTime == 1 ? layoutHeight
+                            : (int) (mExpandedValue * interpolatedTime);
+                } else {
+                    SlidingLinearLayout.this.getLayoutParams().width = interpolatedTime == 1 ? layoutWidth
+                            : (int) (mExpandedValue * interpolatedTime);
+                }
+                SlidingLinearLayout.this.requestLayout();
+
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // 1dp per milliseconds
+        a.setDuration(mDuration);
+        a.setAnimationListener(new AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                if (mOnSlideListener != null)
+                    mOnSlideListener.onSlideStart(SlidingLinearLayout.this);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isSliding = false;
+                mExpanded = (mExpanded == true) ? false : true;
+                if (mOnSlideListener != null)
+                    mOnSlideListener.onSlideEnd(SlidingLinearLayout.this);
+            }
+        });
+        this.startAnimation(a);
     }
 }

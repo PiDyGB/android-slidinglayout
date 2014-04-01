@@ -36,9 +36,8 @@ the License.
     <declare-styleable name="SlidingLinearLayout">
         <attr name="duration" format="integer" />
         <attr name="slide_orientation" format="enum">
-            <enum name="horizontal_left" value="0" />
-            <enum name="horizontal_right" value="1" />
-            <enum name="vertical" value="2" />
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
         </attr>
         <attr name="expanded" format="boolean" />
     </declare-styleable>
