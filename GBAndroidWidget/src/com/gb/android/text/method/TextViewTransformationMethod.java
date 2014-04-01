@@ -22,7 +22,6 @@ import android.graphics.Rect;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ScaleXSpan;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -45,8 +44,6 @@ public class TextViewTransformationMethod implements TransformationMethod2 {
 
     @Override
     public CharSequence getTransformation(CharSequence source, View view) {
-	Log.d("TextViewTransformationMethod", "source:" + source + ":"
-		+ mAllCaps + ":" + mScaleLetterSpacing);
 	if (source == null)
 	    return null;
 	CharSequence transformedText = source;
@@ -70,7 +67,6 @@ public class TextViewTransformationMethod implements TransformationMethod2 {
 			i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	    }
 	}
-	Log.d("TextViewTransformationMethod", "finalText:" + finalText);
 	return finalText;
 
     }
