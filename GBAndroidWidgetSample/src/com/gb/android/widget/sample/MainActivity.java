@@ -23,34 +23,34 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import com.gb.android.widget.Button;
-import com.gb.android.widget.SlidingHelper;
 import com.gb.android.widget.SlidingLinearLayout;
 import com.gb.android.widget.SlidingLinearLayout.SlideListener;
 
 public class MainActivity extends Activity implements OnClickListener,
-        SlideListener {
-
+	SlideListener {
+    
     private SlidingLinearLayout buttonSlidingLinearLayout;
     private Button openTextViews;
     private Button openButtons;
-    private LinearLayout textViewsSlidingLinearLayout;
+    private SlidingLinearLayout textViewsSlidingLinearLayout;
 
     @SuppressLint({ "NewApi", "ResourceAsColor" })
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        LinearLayout root = (LinearLayout) findViewById(R.id.root);
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_main);
+	LinearLayout root = (LinearLayout) findViewById(R.id.root);
 
-        View v = getLayoutInflater().inflate(R.layout.textviews, root, false);
-        root.addView(v);
+	View v = getLayoutInflater().inflate(R.layout.textviews, root, false);
+	root.addView(v);
 
-        openTextViews = (Button) v.findViewById(R.id.button_open_textviews);
+	openTextViews = (Button) v.findViewById(R.id.button_open_textviews);
 
-        textViewsSlidingLinearLayout = (LinearLayout) v
-                .findViewById(R.id.slideTextviews);
+	textViewsSlidingLinearLayout = (SlidingLinearLayout) v
+		.findViewById(R.id.slideTextviews);
+	textViewsSlidingLinearLayout.setSlideListener(this);
 
-        openTextViews.setOnClickListener(this);
+	openTextViews.setOnClickListener(this);
 
         View buttons = getLayoutInflater().inflate(R.layout.buttons, root,
                 false);
@@ -69,41 +69,37 @@ public class MainActivity extends Activity implements OnClickListener,
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.button_open_buttons:
-            buttonSlidingLinearLayout.slide();
-            break;
+	switch (v.getId()) {
+	case R.id.button_open_buttons:
+	    buttonSlidingLinearLayout.slide();
+	    break;
 
-        case R.id.button_open_textviews:
-            if (!textViewsSlidingLinearLayout.isShown())
-                SlidingHelper.expand(textViewsSlidingLinearLayout, 300);
-            else
-                SlidingHelper.collapse(textViewsSlidingLinearLayout, 300);
-            // textViewsSlidingLinearLayout.slide();
-            break;
-        }
+	case R.id.button_open_textviews:
+	    textViewsSlidingLinearLayout.slide();
+	    break;
+	}
     }
 
     @Override
     public void onSlideStart(SlidingLinearLayout slidingLinearLayout) {
-        // TODO Auto-generated method stub
+	// TODO Auto-generated method stub
 
     }
 
     @Override
     public void onSlideEnd(SlidingLinearLayout slidingLinearLayout) {
-        Button b = null;
-        switch (slidingLinearLayout.getId()) {
-        case R.id.slideButtons:
-            b = openButtons;
-            break;
-        case R.id.slideTextviews:
-            b = openTextViews;
-            break;
-        }
-        if (slidingLinearLayout.isExpanded())
-            b.setText("CLOSE");
-        else
-            b.setText("OPEN");
+	Button b = null;
+	switch (slidingLinearLayout.getId()) {
+	case R.id.slideButtons:
+	    b = openButtons;
+	    break;
+	case R.id.slideTextviews:
+	    b = openTextViews;
+	    break;
+	}
+	if (slidingLinearLayout.isExpanded())
+	    b.setText("CLOSE");
+	else
+	    b.setText("OPEN");
     }
 }
