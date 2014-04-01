@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -73,7 +72,6 @@ public class SlidingLinearLayout extends LinearLayout {
      * Constant Value: 2 (0x00000002)
      */
     public static final int VERTICAL = 2;
-    private static final String TAG = SlidingLinearLayout.class.getName();
 
     public SlidingLinearLayout(Context context) {
         super(context);
@@ -205,8 +203,6 @@ public class SlidingLinearLayout extends LinearLayout {
                 mExpandedValue = tot + getPaddingLeft() + getPaddingRight();
             if (!mExpanded)
                 setVisibility(GONE);
-            Log.d(TAG, "onLayout:" + getId() + ":" + mExpandedValue + ":"
-                    + mExpanded);
         }
 
     }
@@ -220,7 +216,6 @@ public class SlidingLinearLayout extends LinearLayout {
                     setMeasuredDimension(getMeasuredWidth(), 0);
                 else
                     setMeasuredDimension(0, getMeasuredHeight());
-                Log.d(TAG, "onMeasure");
             }
     }
 
@@ -228,7 +223,6 @@ public class SlidingLinearLayout extends LinearLayout {
      * Display or hide this view with a sliding motion.
      */
     public void slide() {
-        Log.d(TAG, "slide:" + getId() + ":" + mExpanded);
         if (mExpanded)
             collapse();
         else
@@ -255,7 +249,6 @@ public class SlidingLinearLayout extends LinearLayout {
     }
 
     public void collapse() {
-        Log.d(TAG, "Collapse:" + mExpandedValue);
         if (isSliding)
             return;
 
@@ -311,7 +304,6 @@ public class SlidingLinearLayout extends LinearLayout {
     }
 
     public void expand() {
-        Log.d(TAG, "Expand:" + getId() + ":" + mExpandedValue + ":" + isSliding);
         if (isSliding)
             return;
 
@@ -323,11 +315,6 @@ public class SlidingLinearLayout extends LinearLayout {
             @Override
             protected void applyTransformation(float interpolatedTime,
                     Transformation t) {
-                Log.d(TAG, "apply: "
-                        + getId()
-                        + ":"
-                        + (interpolatedTime == 1 ? layoutHeight
-                                : (int) (mExpandedValue * interpolatedTime)));
                 if (mSlideOrientation == VERTICAL) {
                     SlidingLinearLayout.this.getLayoutParams().height = interpolatedTime == 1 ? layoutHeight
                             : (int) (mExpandedValue * interpolatedTime);
