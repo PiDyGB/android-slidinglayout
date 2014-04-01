@@ -15,43 +15,125 @@
  */
 package com.gb.android.widget;
 
-import java.util.Locale;
-
-import com.gb.android.graphics.Typefaces;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ScaleXSpan;
+import android.text.method.TransformationMethod;
 import android.util.AttributeSet;
+
+import com.gb.android.graphics.Typefaces;
+import com.gb.android.text.method.TextViewTransformationMethod;
 
 public class Button extends android.widget.Button {
 
-    private CharSequence originalText = "";
     private float mScaleLetterSpacing = 0;
-    private String typeFaceName;
-    private boolean toUpperCase;
-    private Locale mLocale;
+    private boolean mAllCaps;
+    private String mTypeFaceName;
+    private Context mContext;
 
     public Button(Context context) {
 	super(context);
-	mLocale = context.getResources().getConfiguration().locale;
+	mContext = context;
     }
 
     public Button(Context context, AttributeSet attrs) {
 	super(context, attrs);
-	mLocale = context.getResources().getConfiguration().locale;
+	mContext = context;
 	parseAttrs(context, attrs);
     }
 
     public Button(Context context, AttributeSet attrs, int defStyle) {
 	super(context, attrs, defStyle);
-	mLocale = context.getResources().getConfiguration().locale;
+	mContext = context;
 	parseAttrs(context, attrs);
+    }
+
+    private void parseAttrs(Context context, AttributeSet attrs) {
+	TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
+		R.styleable.TextView, 0, 0);
+	try {
+	    mScaleLetterSpacing = a.getFloat(
+		    R.styleable.TextView_scaleLetterSpacing, 0f);
+	    mAllCaps = a.getBoolean(R.styleable.TextView_textAllCaps, false);
+	    mTypeFaceName = a.getString(R.styleable.TextView_typeface);
+	} finally {
+	    a.recycle();
+	}
+	setTypefaceName(context, mTypeFaceName);
+	setTransformationMethod(new TextViewTransformationMethod(context,
+		mAllCaps, mScaleLetterSpacing));
+    }
+
+    /**
+     * Sets the properties of this field to transform input to ALL CAPS display.
+     * This may use a "small caps" formatting if available. This setting will be
+     * ignored if this field is editable or selectable.
+     * 
+     * This call replaces the current transformation method. Disabling this will
+     * not necessarily restore the previous behavior from before this was
+     * enabled.
+     * 
+     * @see #setTransformationMethod(TransformationMethod)
+     * @attr ref android.R.styleable#TextView_textAllCaps
+     */
+    public void setAllCaps(boolean allCaps) {
+	mAllCaps = allCaps;
+	setTransformationMethod(new TextViewTransformationMethod(mContext,
+		allCaps, mScaleLetterSpacing));
+    }
+
+    /**
+     * Sets the text color, size, style, hint color, and highlight color from
+     * the specified TextAppearance resource.
+     */
+    @Override
+    public void setTextAppearance(Context context, int resid) {
+	super.setTextAppearance(context, resid);
+
+	TypedArray appearance = context.obtainStyledAttributes(resid,
+		R.styleable.TextView);
+
+	boolean allCaps = appearance.getBoolean(
+		R.styleable.TextView_textAllCaps, false);
+
+	float scaleLetterSpacing = appearance.getFloat(
+		R.styleable.TextView_scaleLetterSpacing, 0f);
+
+	setTransformationMethod(new TextViewTransformationMethod(context,
+		allCaps, scaleLetterSpacing));
+
+	appearance.recycle();
+    }
+
+    /**
+     * Set a custom font from the assets/fonts folder
+     * 
+     * @param ctx
+     *            The {@link Context}
+     * @param font
+     *            A {@link String} that represent a filename in the assets/fonts
+     *            folder
+     */
+    public void setTypefaceName(Context ctx, String font) {
+	mTypeFaceName = font;
+	if (mTypeFaceName != null) {
+	    setPaintFlags(this.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG
+		    | Paint.LINEAR_TEXT_FLAG);
+	    Typeface tf = Typefaces.get(ctx, mTypeFaceName);
+	    if (tf != null)
+		setTypeface(tf);
+
+	}
+    }
+
+    /**
+     * Return the font filename
+     * 
+     * @return A {@link String} that represent the font filename
+     */
+    public String getTypefaceName() {
+	return mTypeFaceName;
     }
 
     /**
@@ -69,120 +151,8 @@ public class Button extends android.widget.Button {
      * @param letterSpacing
      *            A {@link float}
      */
-    public void setScaleLetterSpacing(float letterSpacing) {
-	this.mScaleLetterSpacing = letterSpacing;
-	applyLetterSpacing();
-    }
-
-    /**
-     * Sets a text in this TextView respecting the xml attributes
-     * 
-     * @param text
-     *            A text
-     */
-    public void setCustomText(CharSequence text) {
-	setText(text, null);
-    }
-
-    @Override
-    public void setText(CharSequence text, BufferType type) {
-	originalText = text;
-	if (toUpperCase)
-	    setUpperCase();
-	else
-	    applyLetterSpacing();
-    }
-
-    @Override
-    public CharSequence getText() {
-	return originalText;
-    }
-
-    /**
-     * Set the text in upper case
-     * 
-     */
-    public void setUpperCase() {
-	originalText = originalText != null ? originalText.toString()
-		.toUpperCase(mLocale) : null;
-	applyLetterSpacing();
-    }
-
-    private void applyLetterSpacing() {
-	if (mScaleLetterSpacing == 0) {
-	    super.setText(originalText, BufferType.SPANNABLE);
-	    return;
-	}
-	StringBuilder builder = new StringBuilder();
-	for (int i = 0; i < originalText.length(); i++) {
-	    builder.append(originalText.charAt(i));
-	    if (i + 1 < originalText.length()) {
-		builder.append("\u00A0");
-	    }
-	}
-	SpannableString finalText = new SpannableString(builder.toString());
-	if (builder.toString().length() > 1) {
-	    for (int i = 1; i < builder.toString().length(); i += 2) {
-		finalText.setSpan(new ScaleXSpan(mScaleLetterSpacing), i,
-			i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-	    }
-	}
-	super.setText(finalText, BufferType.SPANNABLE);
-    }
-
-    @SuppressLint("InlinedApi")
-    private void parseAttrs(Context context, AttributeSet attrs) {
-	TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-		R.styleable.Button, 0, 0);
-	int set[] = { android.R.attr.text };
-	TypedArray aa = context.obtainStyledAttributes(attrs, set);
-	try {
-	    mScaleLetterSpacing = a.getFloat(R.styleable.Button_scale_tracking,
-		    0f);
-	    originalText = aa.getText(0);
-	    toUpperCase = a.getBoolean(R.styleable.Button_to_upper_case, false);
-	    typeFaceName = a.getString(R.styleable.Button_typeface);
-	} finally {
-	    a.recycle();
-	    aa.recycle();
-	}
-	setCustomFont(context);
-	if (toUpperCase)
-	    originalText = originalText != null ? originalText.toString()
-		    .toUpperCase(mLocale) : null;
-	applyLetterSpacing();
-    }
-
-    private void setCustomFont(Context ctx) {
-	if (typeFaceName != null) {
-	    setPaintFlags(this.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG
-		    | Paint.LINEAR_TEXT_FLAG);
-	    Typeface tf = Typefaces.get(ctx, typeFaceName);
-	    if (tf != null)
-		setTypeface(tf);
-	}
-    }
-
-    /**
-     * Set a custom font from the assets/fonts folder
-     * 
-     * @param ctx
-     *            The {@link Context}
-     * @param font
-     *            A {@link String} that represent a filename in the assets/fonts
-     *            folder
-     */
-    public void setCustomFont(Context ctx, String font) {
-	typeFaceName = font;
-	setCustomFont(ctx);
-    }
-
-    /**
-     * Return the font filename
-     * 
-     * @return A {@link String} that represent the font filename
-     */
-    public String getCustomFont() {
-	return typeFaceName;
+    public void setScaleLetterSpacing(float scaleLetterSpacing) {
+	setTransformationMethod(new TextViewTransformationMethod(mContext,
+		mAllCaps, scaleLetterSpacing));
     }
 }

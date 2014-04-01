@@ -17,21 +17,21 @@ the License.
 <resources>
 
     <attr name="typeface" format="string" />
-    <attr name="scale_tracking" format="float" />
-    <attr name="to_upper_case" format="boolean" />
+    <attr name="scaleLetterSpacing" format="float" />
+    <attr name="textAllCaps" format="boolean" />
 
     <declare-styleable name="TextView">
-        <attr name="scale_tracking" />
+        <attr name="scaleLetterSpacing" />
         <attr name="typeface" />
-        <attr name="to_upper_case" />
+        <attr name="textAllCaps" />
     </declare-styleable>
     <declare-styleable name="EditText">
         <attr name="typeface" />
     </declare-styleable>
     <declare-styleable name="Button">
-        <attr name="scale_tracking" />
+        <attr name="scaleLetterSpacing" />
         <attr name="typeface" />
-        <attr name="to_upper_case" />
+        <attr name="textAllCaps" />
     </declare-styleable>
     <declare-styleable name="SlidingLinearLayout">
         <attr name="duration" format="integer" />

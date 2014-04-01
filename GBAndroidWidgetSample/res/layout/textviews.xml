@@ -5,7 +5,7 @@
     xmlns:app1="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <com.gb.android.widget.Button
         android:id="@+id/button_open_textviews"
@@ -15,94 +15,101 @@
         android:text="CLOSE"
         tools:ignore="HardcodedText" />
 
-    <com.gb.android.widget.SlidingLinearLayout
+    <com.gb.android.widget.SlidingLayout
         android:id="@+id/slideTextviews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:visibility="gone"
         app:expanded="true" >
 
-        <com.gb.android.widget.TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="My TrackingTextView"
-            app:typeface="Ubuntu-Regular.ttf"
-            tools:ignore="HardcodedText" >
-        </com.gb.android.widget.TextView>
+            android:orientation="vertical" >
 
-        <com.gb.android.widget.TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My TrackingTextView"
-            app:scale_tracking="0.1"
-            tools:ignore="HardcodedText" >
-        </com.gb.android.widget.TextView>
+            <com.gb.android.widget.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My TrackingTextView"
+                app:typeface="Ubuntu-Regular.ttf"
+                tools:ignore="HardcodedText" >
+            </com.gb.android.widget.TextView>
 
-        <com.gb.android.widget.TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My TrackingTextView"
-            app:scale_tracking="0.5"
-            tools:ignore="HardcodedText" >
-        </com.gb.android.widget.TextView>
+            <com.gb.android.widget.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My TrackingTextView"
+                app:scaleLetterSpacing="0.1"
+                tools:ignore="HardcodedText" >
+            </com.gb.android.widget.TextView>
 
-        <com.gb.android.widget.TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My TrackingTextView"
-            app:scale_tracking="1.0"
-            tools:ignore="HardcodedText" >
-        </com.gb.android.widget.TextView>
+            <com.gb.android.widget.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My TrackingTextView"
+                app:scaleLetterSpacing="0.5"
+                tools:ignore="HardcodedText" >
+            </com.gb.android.widget.TextView>
 
-        <com.gb.android.widget.TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My TrackingTextView"
-            app:scale_tracking="1.5"
-            tools:ignore="HardcodedText" >
-        </com.gb.android.widget.TextView>
+            <com.gb.android.widget.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My TrackingTextView"
+                app:scaleLetterSpacing="1.0"
+                tools:ignore="HardcodedText" >
+            </com.gb.android.widget.TextView>
 
-        <com.gb.android.widget.TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My TrackingTextView"
-            app:scale_tracking="2.0"
-            tools:ignore="HardcodedText" >
-        </com.gb.android.widget.TextView>
+            <com.gb.android.widget.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My TrackingTextView"
+                app:scaleLetterSpacing="1.5"
+                tools:ignore="HardcodedText" >
+            </com.gb.android.widget.TextView>
 
-        <com.gb.android.widget.TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My TrackingTextView"
-            app:scale_tracking="2.5"
-            tools:ignore="HardcodedText" >
-        </com.gb.android.widget.TextView>
+            <com.gb.android.widget.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My TrackingTextView"
+                app:scaleLetterSpacing="2.0"
+                tools:ignore="HardcodedText" >
+            </com.gb.android.widget.TextView>
 
-        <com.gb.android.widget.TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My TrackingTextView"
-            app:to_upper_case="true"
-            tools:ignore="HardcodedText" >
-        </com.gb.android.widget.TextView>
+            <com.gb.android.widget.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My TrackingTextView"
+                app:scaleLetterSpacing="2.5"
+                tools:ignore="HardcodedText" >
+            </com.gb.android.widget.TextView>
 
-        <com.gb.android.widget.TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My TrackingTextView"
-            app:scale_tracking="0.1"
-            app:to_upper_case="true"
-            tools:ignore="HardcodedText" >
-        </com.gb.android.widget.TextView>
+            <com.gb.android.widget.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My TrackingTextView"
+                app:textAllCaps="true"
+                tools:ignore="HardcodedText" >
+            </com.gb.android.widget.TextView>
 
-        <com.gb.android.widget.TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My TrackingTextView che va su due meledettissime righe"
-            app:scale_tracking="1"
-            app:to_upper_case="true"
-            tools:ignore="HardcodedText" >
-        </com.gb.android.widget.TextView>
-    </com.gb.android.widget.SlidingLinearLayout>
+            <com.gb.android.widget.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My TrackingTextView"
+                app:scaleLetterSpacing="0.1"
+                app:textAllCaps="true"
+                tools:ignore="HardcodedText" >
+            </com.gb.android.widget.TextView>
+
+            <com.gb.android.widget.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My TrackingTextView che va su due meledettissime righe"
+                app:scaleLetterSpacing="1"
+                app:textAllCaps="true"
+                tools:ignore="HardcodedText" >
+            </com.gb.android.widget.TextView>
+        </LinearLayout>
+    </com.gb.android.widget.SlidingLayout>
 
 </LinearLayout>

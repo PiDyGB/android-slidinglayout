@@ -23,16 +23,17 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import com.gb.android.widget.Button;
+import com.gb.android.widget.SlidingLayout;
 import com.gb.android.widget.SlidingLinearLayout;
 import com.gb.android.widget.SlidingLinearLayout.SlideListener;
 
 public class MainActivity extends Activity implements OnClickListener,
 	SlideListener {
-    
+
     private SlidingLinearLayout buttonSlidingLinearLayout;
     private Button openTextViews;
     private Button openButtons;
-    private SlidingLinearLayout textViewsSlidingLinearLayout;
+    private SlidingLayout textViewsSlidingLinearLayout;
 
     @SuppressLint({ "NewApi", "ResourceAsColor" })
     @Override
@@ -46,25 +47,25 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	openTextViews = (Button) v.findViewById(R.id.button_open_textviews);
 
-	textViewsSlidingLinearLayout = (SlidingLinearLayout) v
+	textViewsSlidingLinearLayout = (SlidingLayout) v
 		.findViewById(R.id.slideTextviews);
-	textViewsSlidingLinearLayout.setSlideListener(this);
+	// textViewsSlidingLinearLayout.setSlideListener(this);
 
 	openTextViews.setOnClickListener(this);
 
-        View buttons = getLayoutInflater().inflate(R.layout.buttons, root,
-                false);
-        root.addView(buttons);
-        openButtons = (Button) buttons.findViewById(R.id.button_open_buttons);
+	View buttons = getLayoutInflater().inflate(R.layout.buttons, root,
+		false);
+	root.addView(buttons);
+	openButtons = (Button) buttons.findViewById(R.id.button_open_buttons);
 
-        buttonSlidingLinearLayout = (SlidingLinearLayout) buttons
-                .findViewById(R.id.slideButtons);
-        buttonSlidingLinearLayout.setSlideListener(this);
+	buttonSlidingLinearLayout = (SlidingLinearLayout) buttons
+		.findViewById(R.id.slideButtons);
+	buttonSlidingLinearLayout.setSlideListener(this);
 
-        openButtons.setOnClickListener(this);
+	openButtons.setOnClickListener(this);
 
-        View et = getLayoutInflater().inflate(R.layout.editexts, root, false);
-        root.addView(et);
+	View et = getLayoutInflater().inflate(R.layout.editexts, root, false);
+	root.addView(et);
     }
 
     @Override
