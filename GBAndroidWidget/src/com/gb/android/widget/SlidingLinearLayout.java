@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -155,6 +156,8 @@ public class SlidingLinearLayout extends LinearLayout {
      */
     public void setExpanded(boolean expanded) {
         mExpanded = expanded;
+        if (mExpanded)
+            setVisibility(VISIBLE);
         invalidate();
         requestLayout();
     }
@@ -179,7 +182,6 @@ public class SlidingLinearLayout extends LinearLayout {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if (!isSliding) {
             super.onLayout(changed, l, t, r, b);
-
             int tot = 0;
             for (int i = 0; i < getChildCount(); i++) {
                 View v = getChildAt(i);
@@ -204,7 +206,6 @@ public class SlidingLinearLayout extends LinearLayout {
             if (!mExpanded)
                 setVisibility(GONE);
         }
-
     }
 
     @Override
@@ -246,6 +247,10 @@ public class SlidingLinearLayout extends LinearLayout {
         } finally {
             a.recycle();
         }
+        
+        setSlideOrientation(mSlideOrientation);
+        setDuration(mDuration);
+        setExpanded(mExpanded);
     }
 
     public void collapse() {
@@ -308,9 +313,10 @@ public class SlidingLinearLayout extends LinearLayout {
             return;
 
         isSliding = true;
-
         this.getLayoutParams().height = 0;
         this.setVisibility(View.VISIBLE);
+
+        Log.d("Sliding", "h: " + mExpandedValue + ":" + layoutHeight);
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime,
