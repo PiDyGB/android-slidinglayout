@@ -47,7 +47,7 @@ public class TextView extends android.widget.TextView {
 	try {
 	    mScaleLetterSpacing = a.getFloat(
 		    R.styleable.TextView_scaleLetterSpacing, 0f);
-	    mAllCaps = a.getBoolean(R.styleable.TextView_textAllCaps, false);
+	    mAllCaps = a.getBoolean(R.styleable.TextView_textUpperCase, false);
 	    mTypeFaceName = a.getString(R.styleable.TextView_typeface);
 	} finally {
 	    a.recycle();
@@ -87,7 +87,7 @@ public class TextView extends android.widget.TextView {
 		R.styleable.TextView);
 
 	boolean allCaps = appearance.getBoolean(
-		R.styleable.TextView_textAllCaps, false);
+		R.styleable.TextView_textUpperCase, false);
 
 	float scaleLetterSpacing = appearance.getFloat(
 		R.styleable.TextView_scaleLetterSpacing, 0f);

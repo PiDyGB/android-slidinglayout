@@ -18,12 +18,12 @@ the License.
 
     <attr name="typeface" format="string" />
     <attr name="scaleLetterSpacing" format="float" />
-    <attr name="textAllCaps" format="boolean" />
+    <attr name="textUpperCase" format="boolean" />
 
     <declare-styleable name="TextView">
         <attr name="scaleLetterSpacing" />
         <attr name="typeface" />
-        <attr name="textAllCaps" />
+        <attr name="textUpperCase" />
     </declare-styleable>
     <declare-styleable name="EditText">
         <attr name="typeface" />
@@ -31,7 +31,7 @@ the License.
     <declare-styleable name="Button">
         <attr name="scaleLetterSpacing" />
         <attr name="typeface" />
-        <attr name="textAllCaps" />
+        <attr name="textUpperCase" />
     </declare-styleable>
     <declare-styleable name="SlidingLinearLayout">
         <attr name="duration" format="integer" />

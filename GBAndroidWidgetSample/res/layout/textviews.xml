@@ -88,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="My TrackingTextView"
-                app:textAllCaps="true"
+                app:textUpperCase="true"
                 tools:ignore="HardcodedText" >
             </com.gb.android.widget.TextView>
 
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:text="My TrackingTextView"
                 app:scaleLetterSpacing="0.1"
-                app:textAllCaps="true"
+                app:textUpperCase="true"
                 tools:ignore="HardcodedText" >
             </com.gb.android.widget.TextView>
 
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:text="My TrackingTextView che va su due meledettissime righe"
                 app:scaleLetterSpacing="1"
-                app:textAllCaps="true"
+                app:textUpperCase="true"
                 tools:ignore="HardcodedText" >
             </com.gb.android.widget.TextView>
         </LinearLayout>

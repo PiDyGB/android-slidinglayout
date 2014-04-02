@@ -36,44 +36,44 @@ public class TextViewTransformationMethod implements TransformationMethod2 {
     private boolean mAllCaps;
 
     public TextViewTransformationMethod(Context context, boolean allCaps,
-	    float scaleLetterSpacing) {
-	mLocale = context.getResources().getConfiguration().locale;
-	mAllCaps = allCaps;
-	mScaleLetterSpacing = scaleLetterSpacing;
+            float scaleLetterSpacing) {
+        mLocale = context.getResources().getConfiguration().locale;
+        mAllCaps = allCaps;
+        mScaleLetterSpacing = scaleLetterSpacing;
     }
 
     @Override
     public CharSequence getTransformation(CharSequence source, View view) {
-	if (source == null)
-	    return null;
-	CharSequence transformedText = source;
-	if (mAllCaps)
-	    transformedText = source.toString().toUpperCase(mLocale);
+        if (source == null)
+            return null;
+        CharSequence transformedText = source;
+        if (mAllCaps)
+            transformedText = source.toString().toUpperCase(mLocale);
 
-	if (mScaleLetterSpacing == 0) {
-	    return transformedText;
-	}
-	StringBuilder builder = new StringBuilder();
-	for (int i = 0; i < transformedText.length(); i++) {
-	    builder.append(transformedText.charAt(i));
-	    if (i + 1 < transformedText.length()) {
-		builder.append("\u00A0");
-	    }
-	}
-	SpannableString finalText = new SpannableString(builder.toString());
-	if (builder.toString().length() > 1) {
-	    for (int i = 1; i < builder.toString().length(); i += 2) {
-		finalText.setSpan(new ScaleXSpan(mScaleLetterSpacing), i,
-			i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-	    }
-	}
-	return finalText;
+        if (mScaleLetterSpacing == 0) {
+            return transformedText;
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < transformedText.length(); i++) {
+            builder.append(transformedText.charAt(i));
+            if (i + 1 < transformedText.length()) {
+                builder.append("\u00A0");
+            }
+        }
+        SpannableString finalText = new SpannableString(builder.toString());
+        if (builder.toString().length() > 1) {
+            for (int i = 1; i < builder.toString().length(); i += 2) {
+                finalText.setSpan(new ScaleXSpan(mScaleLetterSpacing), i,
+                        i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        return finalText;
 
     }
 
     @Override
     public void onFocusChanged(View view, CharSequence sourceText,
-	    boolean focused, int direction, Rect previouslyFocusedRect) {
+            boolean focused, int direction, Rect previouslyFocusedRect) {
     }
 
     @Override
