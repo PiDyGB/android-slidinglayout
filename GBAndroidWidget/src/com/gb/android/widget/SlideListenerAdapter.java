@@ -15,7 +15,7 @@
  */
 package com.gb.android.widget;
 
-import com.gb.android.widget.SlidingLinearLayout.SlideListener;
+import android.view.View;
 
 public abstract class SlideListenerAdapter implements SlideListener {
 
@@ -27,7 +27,7 @@ public abstract class SlideListenerAdapter implements SlideListener {
      * .SlidingLinearLayout)
      */
     @Override
-    public void onSlideStart(SlidingLinearLayout slidingLinearLayout) {
+    public void onSlideStart(View slidingView) {
     }
 
     /*
@@ -38,7 +38,7 @@ public abstract class SlideListenerAdapter implements SlideListener {
      * .SlidingLinearLayout)
      */
     @Override
-    public void onSlideEnd(SlidingLinearLayout slidingLinearLayout) {
+    public void onSlideEnd(View slidingView) {
 
     }
 

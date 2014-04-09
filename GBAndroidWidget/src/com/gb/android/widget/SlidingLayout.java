@@ -1,32 +1,42 @@
 /**
- * 
+ *
  */
 package com.gb.android.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.FrameLayout;
+
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 
 /**
  * @author pidy
- * 
  */
 public class SlidingLayout extends FrameLayout {
 
-    private static final String TAG = SlidingLayout.class.getName();
-    private boolean mExpand = false;
+    private int mDuration;
+    private boolean mExpanded;
+    protected int mExpandedHeight;
+    private android.view.ViewGroup.LayoutParams mLayoutParams;
+    private SlideListener mOnSlideListener;
+    protected boolean isObserved = true;
+    private boolean isAnimated;
 
     /**
      * @param context
      */
     public SlidingLayout(Context context) {
 	super(context);
-	// TODO Auto-generated constructor stub
+	parseAttrs(context, null);
     }
 
     /**
@@ -35,7 +45,7 @@ public class SlidingLayout extends FrameLayout {
      */
     public SlidingLayout(Context context, AttributeSet attrs) {
 	super(context, attrs);
-	// TODO Auto-generated constructor stub
+	parseAttrs(context, attrs);
     }
 
     /**
@@ -45,7 +55,46 @@ public class SlidingLayout extends FrameLayout {
      */
     public SlidingLayout(Context context, AttributeSet attrs, int defStyle) {
 	super(context, attrs, defStyle);
-	// TODO Auto-generated constructor stub
+	parseAttrs(context, attrs);
+    }
+
+    /**
+     * @return the duration
+     */
+    public int getDuration() {
+	return mDuration;
+    }
+
+    /**
+     * @param duration
+     *            the duration to set
+     */
+    public void setDuration(int duration) {
+	this.mDuration = duration;
+    }
+
+    /**
+     * @return the expanded
+     */
+    public boolean isExpanded() {
+	return mExpanded;
+    }
+
+    /**
+     * @param expanded
+     *            the expanded to set
+     */
+    public void setExpanded(boolean expanded) {
+	this.mExpanded = expanded;
+	isObserved = true;
+	invalidate();
+	requestLayout();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+	super.onAttachedToWindow();
+	mLayoutParams = getLayoutParams();
     }
 
     @Override
@@ -90,85 +139,154 @@ public class SlidingLayout extends FrameLayout {
 	    throw new IllegalStateException(
 		    "SlideLayout can host only one direct child");
 	}
-	child.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.AT_MOST);
-	Log.d(TAG, "child: " + getMeasuredHeight() + ":" + getHeight() + ":"
-		+ child.getMeasuredHeight());
+	setupObserver();
 	super.addView(child, index, params);
+    }
+
+    /**
+     * Binds an animation listener to this animation. The animation listener is
+     * notified of animation events such as the start of the animation or the
+     * end of the animation.
+     * 
+     * @param listener
+     *            the animation listener to be notified
+     */
+    public void setSlideListener(SlideListener listener) {
+	mOnSlideListener = listener;
+    }
+
+    public void slide() {
+	if (mExpandedHeight == 0 || isAnimated)
+	    return;
+	if (mExpanded)
+	    collapse();
+	else {
+	    expand();
+	}
+    }
+
+    public void collapse() {
+	if (mExpandedHeight == 0 || isAnimated)
+	    return;
+	isAnimated = true;
+	mExpanded = !mExpanded;
+
+	ValueAnimator valueAnimator = ValueAnimator.ofInt(mExpandedHeight, 0);
+	valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
+
+	    @Override
+	    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+		int val = (Integer) valueAnimator.getAnimatedValue();
+		android.view.ViewGroup.LayoutParams lp = getLayoutParams();
+		lp.height = val;
+		setLayoutParams(lp);
+	    }
+	});
+
+	valueAnimator.addListener(new AnimatorListenerAdapter() {
+	    @Override
+	    public void onAnimationStart(Animator animation) {
+		if (mOnSlideListener != null)
+		    mOnSlideListener.onSlideStart(SlidingLayout.this);
+		setLayoutParams(mLayoutParams);
+	    }
+
+	    @Override
+	    public void onAnimationEnd(Animator animation) {
+		setVisibility(GONE);
+		if (mOnSlideListener != null)
+		    mOnSlideListener.onSlideEnd(SlidingLayout.this);
+		isAnimated = false;
+	    }
+	});
+	valueAnimator.setDuration(mDuration);
+	valueAnimator.start();
+    }
+
+    public void expand() {
+	if (mExpandedHeight == 0 || isAnimated)
+	    return;
+	isAnimated = true;
+	mExpanded = !mExpanded;
+
+	ValueAnimator valueAnimator = ValueAnimator.ofInt(0, mExpandedHeight);
+	valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
+
+	    @Override
+	    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+		int val = (Integer) valueAnimator.getAnimatedValue();
+		android.view.ViewGroup.LayoutParams lp = getLayoutParams();
+		lp.height = val;
+		setLayoutParams(lp);
+	    }
+	});
+
+	valueAnimator.addListener(new AnimatorListenerAdapter() {
+	    @Override
+	    public void onAnimationStart(Animator animation) {
+		if (mOnSlideListener != null)
+		    mOnSlideListener.onSlideStart(SlidingLayout.this);
+		setVisibility(VISIBLE);
+	    }
+
+	    @Override
+	    public void onAnimationEnd(Animator animation) {
+		setLayoutParams(mLayoutParams);
+		if (mOnSlideListener != null)
+		    mOnSlideListener.onSlideEnd(SlidingLayout.this);
+		isAnimated = false;
+	    }
+	});
+	valueAnimator.setDuration(mDuration);
+	valueAnimator.start();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-	Log.d(TAG, "onMeasure");
 	super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-	// if (mExpand) {
-	// mExpand = false;
-	// setMeasuredDimension(getLayoutParams().width, 0);
-	// Log.d(TAG, "onMeasure: " + getMeasuredHeight() + ":" + getHeight()
-	// + ":" + getChildAt(0).getMeasuredHeight());
-	// internalExpand(getChildAt(0).getMeasuredHeight());
-	// }
+	if (isObserved && !mExpanded)
+	    setMeasuredDimension(widthMeasureSpec, 0);
     }
 
-    private void internalExpand(final int measuredHeight) {
-	Animation a = new Animation() {
-	    @Override
-	    protected void applyTransformation(float interpolatedTime,
-		    Transformation t) {
-		Log.d(TAG, "apply: "
-			+ ((interpolatedTime == 1) ? getLayoutParams().height
-				: (int) (measuredHeight * interpolatedTime)));
-		getLayoutParams().height = (interpolatedTime == 1) ? android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-			: (int) (measuredHeight * interpolatedTime);
-		requestLayout();
-	    }
+    private void setupObserver() {
 
-	    @Override
-	    public boolean willChangeBounds() {
-		return true;
-	    }
-	};
+	getViewTreeObserver().addOnGlobalLayoutListener(
+		new OnGlobalLayoutListener() {
 
-	a.setDuration(3000);
-	startAnimation(a);
+		    @SuppressLint("NewApi")
+		    @SuppressWarnings("deprecation")
+		    @Override
+		    public void onGlobalLayout() {
+			mExpandedHeight = getChildAt(0).getHeight()
+				+ getPaddingBottom()
+				+ getPaddingTop()
+				+ ((LayoutParams) getChildAt(0)
+					.getLayoutParams()).bottomMargin
+				+ ((LayoutParams) getChildAt(0)
+					.getLayoutParams()).topMargin;
+			if (!mExpanded)
+			    setVisibility(GONE);
+
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
+			    getViewTreeObserver().removeGlobalOnLayoutListener(
+				    this);
+			else
+			    getViewTreeObserver().removeOnGlobalLayoutListener(
+				    this);
+			isObserved = false;
+		    }
+		});
     }
 
-    public void slide() {
-	if (getVisibility() == VISIBLE)
-	    collapse();
-	else
-	    expand();
-    }
+    private void parseAttrs(Context context, AttributeSet attrs) {
 
-    public void expand() {
-	mExpand = true;
-	setVisibility(VISIBLE);
-	Log.d(TAG, "expanded");
-    }
-
-    public void collapse() {
-	final int initialHeight = getMeasuredHeight();
-	Log.d(TAG, "collapse: " + initialHeight);
-
-	Animation a = new Animation() {
-	    @Override
-	    protected void applyTransformation(float interpolatedTime,
-		    Transformation t) {
-		if (interpolatedTime == 1) {
-		    setVisibility(View.GONE);
-		} else {
-		    getLayoutParams().height = initialHeight
-			    - (int) (initialHeight * interpolatedTime);
-		    requestLayout();
-		}
-	    }
-
-	    @Override
-	    public boolean willChangeBounds() {
-		return true;
-	    }
-	};
-
-	a.setDuration(3000);
-	startAnimation(a);
+	TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
+		R.styleable.SlidingLayout, 0, 0);
+	try {
+	    mDuration = a.getInteger(R.styleable.SlidingLayout_duration, 300);
+	    mExpanded = a.getBoolean(R.styleable.SlidingLayout_expanded, false);
+	} finally {
+	    a.recycle();
+	}
     }
 }

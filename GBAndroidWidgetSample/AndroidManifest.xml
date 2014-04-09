@@ -20,7 +20,7 @@ the License.
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="4"
         android:targetSdkVersion="19" />
 
     <application

@@ -17,8 +17,9 @@ the License.
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/root"
@@ -30,6 +31,28 @@ the License.
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="com.gb.android.widget.sample.MainActivity" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <com.gb.android.widget.Button
+                android:id="@+id/button_open_textviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="CLOSE"
+                tools:ignore="HardcodedText" />
+
+            <com.gb.android.widget.SlidingLayout
+                android:id="@+id/slideTextviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:expanded="true"
+                android:orientation="vertical" >
+            </com.gb.android.widget.SlidingLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

@@ -23,9 +23,9 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import com.gb.android.widget.Button;
+import com.gb.android.widget.SlideListener;
 import com.gb.android.widget.SlidingLayout;
 import com.gb.android.widget.SlidingLinearLayout;
-import com.gb.android.widget.SlidingLinearLayout.SlideListener;
 
 public class MainActivity extends Activity implements OnClickListener,
 	SlideListener {
@@ -34,6 +34,7 @@ public class MainActivity extends Activity implements OnClickListener,
     private Button openTextViews;
     private Button openButtons;
     private SlidingLayout textViewsSlidingLinearLayout;
+    private View child;
 
     @SuppressLint({ "NewApi", "ResourceAsColor" })
     @Override
@@ -42,14 +43,17 @@ public class MainActivity extends Activity implements OnClickListener,
 	setContentView(R.layout.activity_main);
 	LinearLayout root = (LinearLayout) findViewById(R.id.root);
 
-	View v = getLayoutInflater().inflate(R.layout.textviews, root, false);
-	root.addView(v);
+	openTextViews = (Button) findViewById(R.id.button_open_textviews);
 
-	openTextViews = (Button) v.findViewById(R.id.button_open_textviews);
 
-	textViewsSlidingLinearLayout = (SlidingLayout) v
-		.findViewById(R.id.slideTextviews);
-	// textViewsSlidingLinearLayout.setSlideListener(this);
+	child = getLayoutInflater().inflate(R.layout.textviews,
+		textViewsSlidingLinearLayout, false);
+
+	
+	textViewsSlidingLinearLayout = (SlidingLayout) findViewById(R.id.slideTextviews);
+	textViewsSlidingLinearLayout.addView(child);
+	textViewsSlidingLinearLayout.setExpanded(false);
+	textViewsSlidingLinearLayout.setSlideListener(this);
 
 	openTextViews.setOnClickListener(this);
 
@@ -72,35 +76,41 @@ public class MainActivity extends Activity implements OnClickListener,
     public void onClick(View v) {
 	switch (v.getId()) {
 	case R.id.button_open_buttons:
+	    
 	    buttonSlidingLinearLayout.slide();
 	    break;
 
 	case R.id.button_open_textviews:
+
 	    textViewsSlidingLinearLayout.slide();
 	    break;
 	}
     }
 
     @Override
-    public void onSlideStart(SlidingLinearLayout slidingLinearLayout) {
+    public void onSlideStart(View slidingView) {
 	// TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onSlideEnd(SlidingLinearLayout slidingLinearLayout) {
+    public void onSlideEnd(View slidingView) {
 	Button b = null;
-	switch (slidingLinearLayout.getId()) {
+	switch (slidingView.getId()) {
 	case R.id.slideButtons:
 	    b = openButtons;
+	    if (((SlidingLinearLayout) slidingView).isExpanded())
+		b.setText("CLOSE");
+	    else
+		b.setText("OPEN");
 	    break;
 	case R.id.slideTextviews:
 	    b = openTextViews;
+	    if (((SlidingLayout) slidingView).isExpanded())
+		b.setText("CLOSE");
+	    else
+		b.setText("OPEN");
 	    break;
 	}
-	if (slidingLinearLayout.isExpanded())
-	    b.setText("CLOSE");
-	else
-	    b.setText("OPEN");
     }
 }

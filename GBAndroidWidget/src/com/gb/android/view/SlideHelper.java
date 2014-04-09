@@ -1,129 +1,114 @@
 package com.gb.android.view;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.Transformation;
+
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 
 ;
 
 /**
  * @author 'Giuseppe Buzzanca <giuseppebuzzanca@gmail.com>'
- * 
  */
 public class SlideHelper {
 
+    private static boolean isAnimated = false;
+
     public interface SlideListener {
 
-        public void onSlideStart(View view);
+	public void onSlideStart(View view);
 
-        public void onSlideEnd(View view);
+	public void onSlideEnd(View view);
 
     }
 
-    public static void slide(View v, SlideListener listener) {
-        if (v.isShown())
-            collapse(v, listener);
-        else
-            expand(v, listener);
+    public static void slide(View view, int expandedHeight, int duration,
+	    SlideListener listener) {
+	if (view.isShown())
+	    collapse(view, expandedHeight, duration, listener);
+	else
+	    expand(view, expandedHeight, duration, listener);
     }
 
-    public static void collapse(final View v, final SlideListener listener) {
-        final int initialHeight = v.getMeasuredHeight();
+    public static void collapse(final View view, final int expandedHeight,
+	    int duration, final SlideListener listener) {
+	if (expandedHeight == 0 || isAnimated)
+	    return;
+	isAnimated = true;
+	final LayoutParams lp = view.getLayoutParams();
 
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime,
-                    Transformation t) {
-                if (interpolatedTime == 1) {
-                    v.setVisibility(View.GONE);
-                } else {
-                    v.getLayoutParams().height = initialHeight
-                            - (int) (initialHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-            }
+	ValueAnimator valueAnimator = ValueAnimator.ofInt(expandedHeight, 0);
+	valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
 
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-        
-        a.setAnimationListener(new AnimationListener() {
+	    @Override
+	    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+		int val = (Integer) valueAnimator.getAnimatedValue();
+		LayoutParams lp = view.getLayoutParams();
+		lp.height = val;
+		view.setLayoutParams(lp);
+	    }
+	});
 
-            @Override
-            public void onAnimationStart(Animation animation) {
-                if (listener != null)
-                    listener.onSlideStart(v);
-            }
+	valueAnimator.addListener(new AnimatorListenerAdapter() {
+	    @Override
+	    public void onAnimationStart(Animator animation) {
+		if (listener != null)
+		    listener.onSlideStart(view);
+		view.setLayoutParams(lp);
+	    }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                if (listener != null)
-                    listener.onSlideEnd(v);
-            }
-        });
-
-        // 1dp per milliseconds
-        a.setDuration((int) (initialHeight / v.getContext().getResources()
-                .getDisplayMetrics().density));
-        v.startAnimation(a);
+	    @Override
+	    public void onAnimationEnd(Animator animation) {
+		view.setVisibility(View.GONE);
+		if (listener != null)
+		    listener.onSlideEnd(view);
+		isAnimated = false;
+	    }
+	});
+	valueAnimator.setDuration(duration);
+	valueAnimator.start();
     }
 
-    public static void expand(final View v, final SlideListener listener) {
-        Log.d("Slider", "expand");
+    public static void expand(final View view, final int expandedHeight, int duration,
+	    final SlideListener listener) {
+	if (expandedHeight == 0 || isAnimated)
+	    return;
+	isAnimated = true;
+	final LayoutParams lp = view.getLayoutParams();
 
-        v.measure(v.getLayoutParams().width, v.getLayoutParams().height);
-        v.getLayoutParams().height = 0;
-        v.setVisibility(View.VISIBLE);
+	ValueAnimator valueAnimator = ValueAnimator.ofInt(0, expandedHeight);
+	valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
 
-        final int measuredHeight = v.getMeasuredHeight();
+	    @Override
+	    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+		int val = (Integer) valueAnimator.getAnimatedValue();
+		LayoutParams lp = view.getLayoutParams();
+		lp.height = val;
+		view.setLayoutParams(lp);
+	    }
+	});
 
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime,
-                    Transformation t) {
-                v.getLayoutParams().height = interpolatedTime == 1 ? LayoutParams.WRAP_CONTENT
-                        : (int) (measuredHeight * interpolatedTime);
-                v.requestLayout();
-            }
+	valueAnimator.addListener(new AnimatorListenerAdapter() {
+	    @Override
+	    public void onAnimationStart(Animator animation) {
+		if (listener != null)
+		    listener.onSlideStart(view);
+		view.setVisibility(View.VISIBLE);
+	    }
 
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        a.setAnimationListener(new AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-                if (listener != null)
-                    listener.onSlideStart(v);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                if (listener != null)
-                    listener.onSlideEnd(v);
-            }
-        });
-
-        // 1dp per milliseconds
-        a.setDuration((int) (measuredHeight / v.getContext().getResources()
-                .getDisplayMetrics().density));
-        v.startAnimation(a);
+	    @Override
+	    public void onAnimationEnd(Animator animation) {
+		view.setLayoutParams(lp);
+		if (listener != null)
+		    listener.onSlideEnd(view);
+		isAnimated = false;
+	    }
+	});
+	valueAnimator.setDuration(duration);
+	valueAnimator.start();
     }
 
 }

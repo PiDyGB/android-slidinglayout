@@ -98,7 +98,7 @@
         <com.gb.android.widget.Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="My TrackingTextView che va su due meledettissime righe"
+            android:text="My TrackingTextView"
             app:scaleLetterSpacing="1"
             app:textUpperCase="true"
             tools:ignore="HardcodedText" >

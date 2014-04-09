@@ -19,6 +19,8 @@ the License.
     <attr name="typeface" format="string" />
     <attr name="scaleLetterSpacing" format="float" />
     <attr name="textUpperCase" format="boolean" />
+    <attr name="duration" format="integer" />
+    <attr name="expanded" format="boolean" />
 
     <declare-styleable name="TextView">
         <attr name="scaleLetterSpacing" />
@@ -34,12 +36,16 @@ the License.
         <attr name="textUpperCase" />
     </declare-styleable>
     <declare-styleable name="SlidingLinearLayout">
-        <attr name="duration" format="integer" />
         <attr name="slide_orientation" format="enum">
             <enum name="horizontal" value="0" />
             <enum name="vertical" value="1" />
         </attr>
-        <attr name="expanded" format="boolean" />
+        <attr name="duration" />
+        <attr name="expanded" />
+    </declare-styleable>
+    <declare-styleable name="SlidingLayout">
+        <attr name="duration" />
+        <attr name="expanded" />
     </declare-styleable>
 
 </resources>
