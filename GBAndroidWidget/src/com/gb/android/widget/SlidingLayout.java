@@ -1,5 +1,17 @@
-/**
+/*
+ * Copyright (C) 2014 Giuseppe Buzzanca
  *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package com.gb.android.widget;
 
@@ -31,64 +43,69 @@ public class SlidingLayout extends FrameLayout {
     protected boolean isObserved = true;
     private boolean isAnimated;
 
-    /**
-     * @param context
-     */
     public SlidingLayout(Context context) {
 	super(context);
 	parseAttrs(context, null);
     }
 
-    /**
-     * @param context
-     * @param attrs
-     */
     public SlidingLayout(Context context, AttributeSet attrs) {
 	super(context, attrs);
 	parseAttrs(context, attrs);
     }
 
-    /**
-     * @param context
-     * @param attrs
-     * @param defStyle
-     */
     public SlidingLayout(Context context, AttributeSet attrs, int defStyle) {
 	super(context, attrs, defStyle);
 	parseAttrs(context, attrs);
     }
 
     /**
-     * @return the duration
+     * How long this animation should last
+     * 
+     * @return the duration in milliseconds of the animation
      */
     public int getDuration() {
 	return mDuration;
     }
 
     /**
+     * How long this animation should last. The duration cannot be negative.
+     * 
      * @param duration
-     *            the duration to set
+     *            Duration in milliseconds
      */
     public void setDuration(int duration) {
 	this.mDuration = duration;
     }
 
     /**
-     * @return the expanded
+     * Return if it's expanded
+     * 
+     * @return a {@link boolean}
      */
     public boolean isExpanded() {
 	return mExpanded;
     }
 
     /**
+     * Set the view in expanded mode or not.
+     * 
      * @param expanded
-     *            the expanded to set
+     *            a {@link boolean}
      */
     public void setExpanded(boolean expanded) {
 	this.mExpanded = expanded;
 	isObserved = true;
 	invalidate();
 	requestLayout();
+    }
+
+    /**
+     * Return the expanded measured height
+     * 
+     * @return a {@link int}
+     */
+    public int getExpandedHeight() {
+	return mExpandedHeight;
     }
 
     @Override
@@ -155,6 +172,9 @@ public class SlidingLayout extends FrameLayout {
 	mOnSlideListener = listener;
     }
 
+    /**
+     * Display or hide this view with a sliding animation.
+     */
     public void slide() {
 	if (mExpandedHeight == 0 || isAnimated)
 	    return;
@@ -165,6 +185,9 @@ public class SlidingLayout extends FrameLayout {
 	}
     }
 
+    /**
+     * Collapse the view with a sliding animation if it's not already collapsed
+     */
     public void collapse() {
 	if (mExpandedHeight == 0 || isAnimated)
 	    return;
@@ -203,6 +226,9 @@ public class SlidingLayout extends FrameLayout {
 	valueAnimator.start();
     }
 
+    /**
+     * Expand the view with a sliding animation if it's not already expanded
+     */
     public void expand() {
 	if (mExpandedHeight == 0 || isAnimated)
 	    return;

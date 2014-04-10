@@ -112,6 +112,11 @@ public class SlidingLinearLayout extends LinearLayout {
 	return mExpanded;
     }
 
+    /**
+     * Return the expanded measured height
+     * 
+     * @return a {@link int}
+     */
     public int getExpandedHeight() {
 	return mExpandedHeight;
     }
@@ -137,7 +142,7 @@ public class SlidingLinearLayout extends LinearLayout {
     }
 
     /**
-     * Display or hide this view with a sliding motion.
+     * Display or hide this view with a sliding animation.
      */
     public void slide() {
 	if (mExpandedHeight == 0 || isAnimated)
@@ -196,6 +201,9 @@ public class SlidingLinearLayout extends LinearLayout {
 	}
     }
 
+    /**
+     * Collapse the view with a sliding animation if it's not already collapsed
+     */
     public void collapse() {
 	if (mExpandedHeight == 0 || isAnimated)
 	    return;
@@ -234,6 +242,9 @@ public class SlidingLinearLayout extends LinearLayout {
 	valueAnimator.start();
     }
 
+    /**
+     * Expand the view with a sliding animation if it's not already expanded
+     */
     public void expand() {
 	if (mExpandedHeight == 0 || isAnimated)
 	    return;
@@ -249,7 +260,7 @@ public class SlidingLinearLayout extends LinearLayout {
 		android.view.ViewGroup.LayoutParams lp = getLayoutParams();
 		lp.height = val;
 		requestLayout();
-		//setLayoutParams(lp);
+		// setLayoutParams(lp);
 	    }
 	});
 
