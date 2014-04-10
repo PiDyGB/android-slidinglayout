@@ -43,6 +43,8 @@ public class SlidingLinearLayout extends LinearLayout {
     private boolean isObserved = true;
     private int mExpandedHeight;
     private boolean isAnimated;
+    private boolean deliveryExpandOnGlobalLayoutFinished;
+    private boolean deliveryCollapseOnGlobalLayoutFinished;
 
     public SlidingLinearLayout(Context context) {
 	super(context);
@@ -174,6 +176,15 @@ public class SlidingLinearLayout extends LinearLayout {
 			    getViewTreeObserver().removeOnGlobalLayoutListener(
 				    this);
 			isObserved = false;
+	         if (deliveryExpandOnGlobalLayoutFinished){
+                expand();
+                deliveryExpandOnGlobalLayoutFinished = false;
+            }
+            if (deliveryCollapseOnGlobalLayoutFinished){
+                collapse();
+                deliveryCollapseOnGlobalLayoutFinished = false;
+            }
+            
 		    }
 		});
     }
@@ -205,12 +216,17 @@ public class SlidingLinearLayout extends LinearLayout {
      * Collapse the view with a sliding animation if it's not already collapsed
      */
     public void collapse() {
+    if (isObserved && !deliveryExpandOnGlobalLayoutFinished) {
+        deliveryCollapseOnGlobalLayoutFinished = true;
+        return;
+    }
 	if (mExpandedHeight == 0 || isAnimated)
 	    return;
 	isAnimated = true;
 	mExpanded = !mExpanded;
 
-	ValueAnimator valueAnimator = ValueAnimator.ofInt(mExpandedHeight, 0);
+    measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+    ValueAnimator valueAnimator = ValueAnimator.ofInt(Math.max(mExpandedHeight, getMeasuredHeight()), 0);
 	valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
 
 	    @Override
@@ -227,6 +243,7 @@ public class SlidingLinearLayout extends LinearLayout {
 	    public void onAnimationStart(Animator animation) {
 		if (mOnSlideListener != null)
 		    mOnSlideListener.onSlideStart(SlidingLinearLayout.this);
+	    mLayoutParams.height = -2;
 		setLayoutParams(mLayoutParams);
 	    }
 
@@ -246,12 +263,17 @@ public class SlidingLinearLayout extends LinearLayout {
      * Expand the view with a sliding animation if it's not already expanded
      */
     public void expand() {
+    if (isObserved && !deliveryCollapseOnGlobalLayoutFinished) {
+        deliveryExpandOnGlobalLayoutFinished = true;
+        return;
+     }
 	if (mExpandedHeight == 0 || isAnimated)
 	    return;
 	isAnimated = true;
 	mExpanded = !mExpanded;
 
-	ValueAnimator valueAnimator = ValueAnimator.ofInt(0, mExpandedHeight);
+    measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+    ValueAnimator valueAnimator = ValueAnimator.ofInt(0, Math.max(mExpandedHeight, getMeasuredHeight()));
 	valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
 
 	    @Override
@@ -274,6 +296,7 @@ public class SlidingLinearLayout extends LinearLayout {
 
 	    @Override
 	    public void onAnimationEnd(Animator animation) {
+        mLayoutParams.height = -2;
 		setLayoutParams(mLayoutParams);
 		if (mOnSlideListener != null)
 		    mOnSlideListener.onSlideEnd(SlidingLinearLayout.this);

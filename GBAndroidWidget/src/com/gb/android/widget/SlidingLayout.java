@@ -42,6 +42,8 @@ public class SlidingLayout extends FrameLayout {
     private SlideListener mOnSlideListener;
     protected boolean isObserved = true;
     private boolean isAnimated;
+    private boolean deliveryExpandOnGlobalLayoutFinished;
+    private boolean deliveryCollapseOnGlobalLayoutFinished;
 
     public SlidingLayout(Context context) {
 	super(context);
@@ -189,12 +191,16 @@ public class SlidingLayout extends FrameLayout {
      * Collapse the view with a sliding animation if it's not already collapsed
      */
     public void collapse() {
+    if (isObserved && !deliveryExpandOnGlobalLayoutFinished) {
+        deliveryCollapseOnGlobalLayoutFinished = true;
+        return;
+    }
 	if (mExpandedHeight == 0 || isAnimated)
 	    return;
 	isAnimated = true;
 	mExpanded = !mExpanded;
-
-	ValueAnimator valueAnimator = ValueAnimator.ofInt(mExpandedHeight, 0);
+	measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+	ValueAnimator valueAnimator = ValueAnimator.ofInt(Math.max(mExpandedHeight, getMeasuredHeight()), 0);
 	valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
 
 	    @Override
@@ -211,6 +217,7 @@ public class SlidingLayout extends FrameLayout {
 	    public void onAnimationStart(Animator animation) {
 		if (mOnSlideListener != null)
 		    mOnSlideListener.onSlideStart(SlidingLayout.this);
+		mLayoutParams.height = -2;
 		setLayoutParams(mLayoutParams);
 	    }
 
@@ -230,12 +237,16 @@ public class SlidingLayout extends FrameLayout {
      * Expand the view with a sliding animation if it's not already expanded
      */
     public void expand() {
+    if (isObserved && !deliveryCollapseOnGlobalLayoutFinished) {
+       deliveryExpandOnGlobalLayoutFinished = true;
+       return;
+    }
 	if (mExpandedHeight == 0 || isAnimated)
 	    return;
 	isAnimated = true;
 	mExpanded = !mExpanded;
-
-	ValueAnimator valueAnimator = ValueAnimator.ofInt(0, mExpandedHeight);
+    measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+	ValueAnimator valueAnimator = ValueAnimator.ofInt(0, Math.max(mExpandedHeight, getMeasuredHeight()));
 	valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
 
 	    @Override
@@ -257,6 +268,7 @@ public class SlidingLayout extends FrameLayout {
 
 	    @Override
 	    public void onAnimationEnd(Animator animation) {
+	    mLayoutParams.height = -2;
 		setLayoutParams(mLayoutParams);
 		if (mOnSlideListener != null)
 		    mOnSlideListener.onSlideEnd(SlidingLayout.this);
@@ -300,6 +312,15 @@ public class SlidingLayout extends FrameLayout {
 			    getViewTreeObserver().removeOnGlobalLayoutListener(
 				    this);
 			isObserved = false;
+			if (deliveryExpandOnGlobalLayoutFinished){
+			    expand();
+			    deliveryExpandOnGlobalLayoutFinished = false;
+			}
+			if (deliveryCollapseOnGlobalLayoutFinished){
+			    collapse();
+			    deliveryCollapseOnGlobalLayoutFinished = false;
+			}
+			
 		    }
 		});
     }
