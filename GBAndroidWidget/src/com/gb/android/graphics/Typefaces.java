@@ -25,32 +25,32 @@ import java.util.HashMap;
  * This Class handles font files in the assets folder
  */
 public class Typefaces {
-    private static final HashMap<String, Typeface> fontMap = new HashMap<String, Typeface>();
+	private static final HashMap<String, Typeface> fontMap = new HashMap<String, Typeface>();
 
-    /**
-     * Loads a font filename from the assets/fonts folder, implements a memory
-     * cache mechanism
-     * 
-     * @param context
-     *            The {@link Context}
-     * @param font
-     *            The filename of the font file to load
-     * @return Return a {@link Typeface}
-     */
-    public static Typeface get(Context context, String font) {
-	synchronized (fontMap) {
-	    if (!fontMap.containsKey(font)) {
-		try {
-		    Typeface typeface = Typeface.createFromAsset(context
-			    .getResources().getAssets(), "fonts/" + font);
-		    fontMap.put(font, typeface);
-		} catch (Exception e) {
-		    Log.e("FontFactory", "Could not get typeface '" + font
-			    + "' because: " + e.getMessage());
-		    return null;
+	/**
+	 * Loads a font filename from the assets/fonts folder, implements a memory
+	 * cache mechanism
+	 * 
+	 * @param context
+	 *            The {@link Context}
+	 * @param font
+	 *            The filename of the font file to load
+	 * @return Return a {@link Typeface}
+	 */
+	public static Typeface get(Context context, String font) {
+		synchronized (fontMap) {
+			if (!fontMap.containsKey(font)) {
+				try {
+					Typeface typeface = Typeface.createFromAsset(context
+							.getResources().getAssets(), "fonts/" + font);
+					fontMap.put(font, typeface);
+				} catch (Exception e) {
+					Log.e("FontFactory", "Could not get typeface '" + font
+							+ "' because: " + e.getMessage());
+					return null;
+				}
+			}
+			return fontMap.get(font);
 		}
-	    }
-	    return fontMap.get(font);
 	}
-    }
 }

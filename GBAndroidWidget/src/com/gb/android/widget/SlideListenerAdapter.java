@@ -19,27 +19,27 @@ import android.view.View;
 
 public abstract class SlideListenerAdapter implements SlideListener {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.slidinglinearlayout.SlideListener#onSlideStart(com.slidinglinearlayout
-     * .SlidingLinearLayout)
-     */
-    @Override
-    public void onSlideStart(View slidingView) {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.slidinglinearlayout.SlideListener#onSlideStart(com.slidinglinearlayout
+	 * .SlidingLinearLayout)
+	 */
+	@Override
+	public void onSlideStart(View slidingView) {
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.slidinglinearlayout.SlideListener#onSlideEnd(com.slidinglinearlayout
-     * .SlidingLinearLayout)
-     */
-    @Override
-    public void onSlideEnd(View slidingView) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.slidinglinearlayout.SlideListener#onSlideEnd(com.slidinglinearlayout
+	 * .SlidingLinearLayout)
+	 */
+	@Override
+	public void onSlideEnd(View slidingView) {
 
-    }
+	}
 
 }
