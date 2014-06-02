@@ -15,11 +15,11 @@
  */
 package com.github.pidygb.android.graphics;
 
-import java.util.HashMap;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
+
+import java.util.HashMap;
 
 /**
  * This Class handles font files in the assets folder

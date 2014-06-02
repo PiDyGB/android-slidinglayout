@@ -15,14 +15,14 @@
  */
 package com.github.pidygb.android.text.method;
 
-import java.util.Locale;
-
 import android.content.Context;
 import android.graphics.Rect;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ScaleXSpan;
 import android.view.View;
+
+import java.util.Locale;
 
 /**
  * Transforms source text into an ALL CAPS string, locale-aware.
