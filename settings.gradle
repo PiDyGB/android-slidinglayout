@@ -1,2 +1,2 @@
-include ':GBAndroidWidgetSample'
-include ':GBAndroidWidget'
+include ':PiDyGBAndroid'
+include ':PiDyGBAndroidSample'
