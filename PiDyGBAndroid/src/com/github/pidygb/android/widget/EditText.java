@@ -46,7 +46,7 @@ public class EditText extends android.widget.EditText {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.EditText, 0, 0);
         try {
-            typeFaceName = a.getString(R.styleable.TextView_typeface);
+            typeFaceName = a.getString(R.styleable.EditText_typeface);
         } finally {
             a.recycle();
         }
