@@ -52,12 +52,12 @@ public class Button extends android.widget.Button {
 
     private void parseAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-                R.styleable.TextView, 0, 0);
+                R.styleable.Button, 0, 0);
         try {
             mScaleLetterSpacing = a.getFloat(
-                    R.styleable.TextView_scaleLetterSpacing, 0f);
-            mAllCaps = a.getBoolean(R.styleable.TextView_textUpperCase, false);
-            mTypeFaceName = a.getString(R.styleable.TextView_typeface);
+                    R.styleable.Button_scaleLetterSpacing, 0f);
+            mAllCaps = a.getBoolean(R.styleable.Button_textUpperCase, false);
+            mTypeFaceName = a.getString(R.styleable.Button_typeface);
         } finally {
             a.recycle();
         }
@@ -75,7 +75,7 @@ public class Button extends android.widget.Button {
      * not necessarily restore the previous behavior from before this was
      * enabled.
      *
-     * @attr allCaps android.R.styleable#TextView_textAllCaps
+     * @param allCaps android.R.styleable#TextView_textAllCaps
      * @see #setTransformationMethod(TransformationMethod)
      */
     public void setAllCaps(boolean allCaps) {
@@ -88,18 +88,23 @@ public class Button extends android.widget.Button {
      * Sets the text color, size, style, hint color, and highlight color from
      * the specified TextAppearance resource.
      */
+    @SuppressWarnings("ResourceType")
     @Override
     public void setTextAppearance(Context context, int resid) {
         super.setTextAppearance(context, resid);
 
         TypedArray appearance = context.obtainStyledAttributes(resid,
-                R.styleable.TextView);
+                R.styleable.Button);
 
         boolean allCaps = appearance.getBoolean(
-                R.styleable.TextView_textUpperCase, false);
+                R.styleable.Button_textUpperCase, false);
 
         float scaleLetterSpacing = appearance.getFloat(
-                R.styleable.TextView_scaleLetterSpacing, 0f);
+                R.styleable.Button_scaleLetterSpacing, 0f);
+
+        mTypeFaceName = appearance.getString(R.styleable.Button_typeface);
+
+        setTypefaceName(context, mTypeFaceName);
 
         setTransformationMethod(new TextViewTransformationMethod(context,
                 allCaps, scaleLetterSpacing));

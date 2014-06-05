@@ -26,8 +26,6 @@ import java.util.Locale;
 
 /**
  * Transforms source text into an ALL CAPS string, locale-aware.
- *
- * @hide
  */
 public class TextViewTransformationMethod implements TransformationMethod2 {
 

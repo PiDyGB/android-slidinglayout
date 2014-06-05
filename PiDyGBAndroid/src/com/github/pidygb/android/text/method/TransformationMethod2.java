@@ -20,8 +20,6 @@ import android.text.method.TransformationMethod;
 /**
  * TransformationMethod2 extends the TransformationMethod interface and adds the
  * ability to relax restrictions of TransformationMethod.
- *
- * @hide
  */
 public interface TransformationMethod2 extends TransformationMethod {
     /**
