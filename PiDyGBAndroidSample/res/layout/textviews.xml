@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <com.github.pidygb.android.widget.TextView
         android:layout_width="match_parent"
@@ -18,56 +18,49 @@
         android:layout_height="wrap_content"
         android:text="My TrackingTextView"
         app:scaleLetterSpacing="0.1"
-        tools:ignore="HardcodedText" >
-    </com.github.pidygb.android.widget.TextView>
+        tools:ignore="HardcodedText"></com.github.pidygb.android.widget.TextView>
 
     <com.github.pidygb.android.widget.TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="My TrackingTextView"
         app:scaleLetterSpacing="0.5"
-        tools:ignore="HardcodedText" >
-    </com.github.pidygb.android.widget.TextView>
+        tools:ignore="HardcodedText"></com.github.pidygb.android.widget.TextView>
 
     <com.github.pidygb.android.widget.TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="My TrackingTextView"
         app:scaleLetterSpacing="1.0"
-        tools:ignore="HardcodedText" >
-    </com.github.pidygb.android.widget.TextView>
+        tools:ignore="HardcodedText"></com.github.pidygb.android.widget.TextView>
 
     <com.github.pidygb.android.widget.TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="My TrackingTextView"
         app:scaleLetterSpacing="1.5"
-        tools:ignore="HardcodedText" >
-    </com.github.pidygb.android.widget.TextView>
+        tools:ignore="HardcodedText"></com.github.pidygb.android.widget.TextView>
 
     <com.github.pidygb.android.widget.TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="My TrackingTextView"
         app:scaleLetterSpacing="2.0"
-        tools:ignore="HardcodedText" >
-    </com.github.pidygb.android.widget.TextView>
+        tools:ignore="HardcodedText"></com.github.pidygb.android.widget.TextView>
 
     <com.github.pidygb.android.widget.TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="My TrackingTextView"
         app:scaleLetterSpacing="2.5"
-        tools:ignore="HardcodedText" >
-    </com.github.pidygb.android.widget.TextView>
+        tools:ignore="HardcodedText"></com.github.pidygb.android.widget.TextView>
 
     <com.github.pidygb.android.widget.TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="My TrackingTextView"
         app:textUpperCase="true"
-        tools:ignore="HardcodedText" >
-    </com.github.pidygb.android.widget.TextView>
+        tools:ignore="HardcodedText"></com.github.pidygb.android.widget.TextView>
 
     <com.github.pidygb.android.widget.TextView
         android:layout_width="match_parent"
@@ -75,8 +68,7 @@
         android:text="My TrackingTextView"
         app:scaleLetterSpacing="0.1"
         app:textUpperCase="true"
-        tools:ignore="HardcodedText" >
-    </com.github.pidygb.android.widget.TextView>
+        tools:ignore="HardcodedText"></com.github.pidygb.android.widget.TextView>
 
     <com.github.pidygb.android.widget.TextView
         android:layout_width="match_parent"
@@ -84,7 +76,6 @@
         android:text="My TrackingTextView"
         app:scaleLetterSpacing="1"
         app:textUpperCase="true"
-        tools:ignore="HardcodedText" >
-    </com.github.pidygb.android.widget.TextView>
+        tools:ignore="HardcodedText"></com.github.pidygb.android.widget.TextView>
 
 </LinearLayout>

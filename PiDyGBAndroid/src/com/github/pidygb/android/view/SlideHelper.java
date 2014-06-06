@@ -23,22 +23,12 @@ import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 
-;
-
 /**
  * @author 'Giuseppe Buzzanca <giuseppebuzzanca@gmail.com>'
  */
 public class SlideHelper {
 
     private static boolean isAnimated = false;
-
-    public interface SlideListener {
-
-        public void onSlideStart(View view);
-
-        public void onSlideEnd(View view);
-
-    }
 
     public static void slide(View view, int expandedHeight, int duration,
                              SlideListener listener) {
@@ -124,6 +114,14 @@ public class SlideHelper {
         });
         valueAnimator.setDuration(duration);
         valueAnimator.start();
+    }
+
+    public interface SlideListener {
+
+        public void onSlideStart(View view);
+
+        public void onSlideEnd(View view);
+
     }
 
 }
