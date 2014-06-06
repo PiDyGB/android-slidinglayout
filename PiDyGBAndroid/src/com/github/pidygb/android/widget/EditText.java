@@ -53,16 +53,6 @@ public class EditText extends android.widget.EditText {
         setCustomFont(context);
     }
 
-    private void setCustomFont(Context ctx) {
-        if (typeFaceName != null) {
-            setPaintFlags(this.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG
-                    | Paint.LINEAR_TEXT_FLAG);
-            Typeface tf = Typefaces.get(ctx, typeFaceName);
-            if (tf != null)
-                setTypeface(tf);
-        }
-    }
-
     /**
      * Set a custom font from the assets/fonts folder
      *
@@ -82,5 +72,15 @@ public class EditText extends android.widget.EditText {
      */
     public String getCustomFont() {
         return typeFaceName;
+    }
+
+    private void setCustomFont(Context ctx) {
+        if (typeFaceName != null) {
+            setPaintFlags(this.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG
+                    | Paint.LINEAR_TEXT_FLAG);
+            Typeface tf = Typefaces.get(ctx, typeFaceName);
+            if (tf != null)
+                setTypeface(tf);
+        }
     }
 }

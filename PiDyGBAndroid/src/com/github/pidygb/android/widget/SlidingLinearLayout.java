@@ -92,6 +92,15 @@ public class SlidingLinearLayout extends LinearLayout {
     }
 
     /**
+     * Return if it's expanded
+     *
+     * @return a {@link boolean}
+     */
+    public boolean isExpanded() {
+        return mExpanded;
+    }
+
+    /**
      * Set the view in expanded mode or not.
      *
      * @param expanded a {@link boolean}
@@ -101,15 +110,6 @@ public class SlidingLinearLayout extends LinearLayout {
         isObserved = true;
         invalidate();
         requestLayout();
-    }
-
-    /**
-     * Return if it's expanded
-     *
-     * @return a {@link boolean}
-     */
-    public boolean isExpanded() {
-        return mExpanded;
     }
 
     /**

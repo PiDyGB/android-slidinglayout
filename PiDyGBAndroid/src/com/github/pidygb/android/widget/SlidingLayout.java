@@ -36,12 +36,12 @@ import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
  */
 public class SlidingLayout extends FrameLayout {
 
+    protected int mExpandedHeight;
+    protected boolean isObserved = true;
     private int mDuration;
     private boolean mExpanded;
-    protected int mExpandedHeight;
     private android.view.ViewGroup.LayoutParams mLayoutParams;
     private SlideListener mOnSlideListener;
-    protected boolean isObserved = true;
     private boolean isAnimated;
     private boolean deliveryExpandOnGlobalLayoutFinished;
     private boolean deliveryCollapseOnGlobalLayoutFinished;
