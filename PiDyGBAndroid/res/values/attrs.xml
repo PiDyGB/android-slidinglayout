@@ -35,10 +35,6 @@ the License.
         <attr name="textUpperCase" />
     </declare-styleable>
     <declare-styleable name="SlidingLinearLayout">
-        <attr name="slide_orientation" format="enum">
-            <enum name="horizontal" value="0" />
-            <enum name="vertical" value="1" />
-        </attr>
         <attr name="duration" />
         <attr name="expanded" />
     </declare-styleable>
