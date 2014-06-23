@@ -47,8 +47,8 @@ Use the following layouts in your xml.
     
 ##### When:
 
-`app:expanded` : if the start status of the layout is expanded or not
-`app:duration` : the animation duration in millis
+* `app:expanded` : if the start status of the layout is expanded or not
+* `app:duration` : the animation duration in millis
 
 Fill these layouts with your Views via xml or programmatically
 
@@ -98,6 +98,6 @@ Use the following views in your xml:
 
 ##### When:
 
-`app:typeface` : A font file present in ***assets/fonts*** folder
-`app:scaleLetterSpacing` : A scale factor for letter spacing
-`app:textUpperCase` : force the text in uppercase
+* `app:typeface` : A font file present in ***assets/fonts*** folder
+* `app:scaleLetterSpacing` : A scale factor for letter spacing
+* `app:textUpperCase` : force the text in uppercase
