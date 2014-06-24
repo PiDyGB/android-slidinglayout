@@ -90,7 +90,6 @@ public class TextView extends android.widget.TextView {
      * Sets the text color, size, style, hint color, and highlight color from
      * the specified TextAppearance resource.
      */
-    @SuppressWarnings("ResourceType")
     @Override
     public void setTextAppearance(Context context, int resid) {
         super.setTextAppearance(context, resid);
