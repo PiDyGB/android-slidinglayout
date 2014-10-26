@@ -35,6 +35,7 @@ import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 /**
  * A {@link android.widget.LinearLayout} version with sliding animation implementation
  */
+@SuppressWarnings({"UnusedDeclaration", "NullableProblems"})
 public class SlidingLinearLayout extends LinearLayout {
 
     private int mDuration;
@@ -124,7 +125,7 @@ public class SlidingLinearLayout extends LinearLayout {
     /**
      * Set the expanded height
      *
-     * @param expandedHeight
+     * @param expandedHeight The expanded height in pixel
      */
     public void setExpandedHeight(int expandedHeight) {
         mExpandedHeight = expandedHeight;

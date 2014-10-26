@@ -34,6 +34,7 @@ import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 /**
  * @author pidy
  */
+@SuppressWarnings({"UnusedDeclaration", "NullableProblems"})
 public class SlidingLayout extends FrameLayout {
 
     protected int mExpandedHeight;
@@ -112,7 +113,7 @@ public class SlidingLayout extends FrameLayout {
     /**
      * Set the expanded height
      *
-     * @param expandedHeight
+     * @param expandedHeight The expanded height in pixel
      */
     public void setExpandedHeight(int expandedHeight) {
         mExpandedHeight = expandedHeight;
