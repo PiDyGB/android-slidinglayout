@@ -21,7 +21,7 @@ dependencies {
 ```
 ### Usage
 
-*For a working implementation of this project see the `PiDyGBAndroidSample/` folder.*
+*For a working implementation of this project see the `sample/` folder.*
 
 #### Layout
 
