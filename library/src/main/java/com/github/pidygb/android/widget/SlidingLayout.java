@@ -109,6 +109,15 @@ public class SlidingLayout extends FrameLayout {
         return mExpandedHeight;
     }
 
+    /**
+     * Set the expanded height
+     *
+     * @param expandedHeight
+     */
+    public void setExpandedHeight(int expandedHeight) {
+        mExpandedHeight = expandedHeight;
+    }
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
