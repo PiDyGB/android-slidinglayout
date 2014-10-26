@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.github.pidygb.android.widget.TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Standard font"
+        tools:ignore="HardcodedText,HardcodedText"></com.github.pidygb.android.widget.TextView>
+
+    <com.github.pidygb.android.widget.EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text" />
+
+    <com.github.pidygb.android.widget.TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ubuntu Regular font"
+        app:typeface="Ubuntu-Regular.ttf"
+        tools:ignore="HardcodedText"></com.github.pidygb.android.widget.TextView>
+
+    <com.github.pidygb.android.widget.EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:typeface="Ubuntu-Regular.ttf" />
+
+</LinearLayout>

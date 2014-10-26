@@ -1,0 +1,20 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.0.1"
+
+    defaultConfig {
+        applicationId "com.github.pidygb.android"
+        minSdkVersion 4
+        targetSdkVersion 21
+        versionCode 4
+        versionName "0.1.4"
+    }
+}
+
+dependencies {
+    compile 'com.nineoldandroids:library:2.4.0'
+}
+
+apply from: 'https://raw.githubusercontent.com/PiDyGB/gradle-mvn-push/master/gradle-mvn-push.gradle'

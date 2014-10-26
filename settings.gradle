@@ -1,2 +1,1 @@
-include ':PiDyGBAndroid'
-include ':PiDyGBAndroidSample'
+include ':sample', ':library'
