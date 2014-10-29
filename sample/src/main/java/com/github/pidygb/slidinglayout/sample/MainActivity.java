@@ -13,28 +13,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.pidygb.android.sample;
+package com.github.pidygb.slidinglayout.sample;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.github.pidygb.android.widget.Button;
-import com.github.pidygb.android.widget.SlideListener;
-import com.github.pidygb.android.widget.SlidingLayout;
-import com.github.pidygb.android.widget.SlidingLinearLayout;
+import com.github.pidygb.slidinglayout.widget.SlideListener;
+import com.github.pidygb.slidinglayout.widget.SlidingLayout;
+import com.github.pidygb.slidinglayout.widget.SlidingLinearLayout;
 
 public class MainActivity extends Activity implements OnClickListener,
         SlideListener {
 
     private SlidingLinearLayout buttonSlidingLinearLayout;
-    private Button openTextViews;
-    private Button openButtons;
     private SlidingLayout textViewsSlidingLinearLayout;
-    private View child;
+    private Button openTextViews;
 
     @SuppressLint({"NewApi", "ResourceAsColor"})
     @Override
@@ -46,40 +44,17 @@ public class MainActivity extends Activity implements OnClickListener,
         openTextViews = (Button) findViewById(R.id.button_open_textviews);
 
 
-        child = getLayoutInflater().inflate(R.layout.textviews,
-                textViewsSlidingLinearLayout, false);
-
 
         textViewsSlidingLinearLayout = (SlidingLayout) findViewById(R.id.slideTextviews);
-        textViewsSlidingLinearLayout.addView(child);
-        textViewsSlidingLinearLayout.setExpanded(false);
         textViewsSlidingLinearLayout.setSlideListener(this);
 
         openTextViews.setOnClickListener(this);
 
-        View buttons = getLayoutInflater().inflate(R.layout.buttons, root,
-                false);
-        root.addView(buttons);
-        openButtons = (Button) buttons.findViewById(R.id.button_open_buttons);
-
-        buttonSlidingLinearLayout = (SlidingLinearLayout) buttons
-                .findViewById(R.id.slideButtons);
-        buttonSlidingLinearLayout.setSlideListener(this);
-
-        openButtons.setOnClickListener(this);
-
-        View et = getLayoutInflater().inflate(R.layout.editexts, root, false);
-        root.addView(et);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_open_buttons:
-
-                buttonSlidingLinearLayout.slide();
-                break;
-
             case R.id.button_open_textviews:
 
                 textViewsSlidingLinearLayout.slide();
@@ -97,13 +72,6 @@ public class MainActivity extends Activity implements OnClickListener,
     public void onSlideEnd(View slidingView) {
         Button b = null;
         switch (slidingView.getId()) {
-            case R.id.slideButtons:
-                b = openButtons;
-                if (((SlidingLinearLayout) slidingView).isExpanded())
-                    b.setText("CLOSE");
-                else
-                    b.setText("OPEN");
-                break;
             case R.id.slideTextviews:
                 b = openTextViews;
                 if (((SlidingLayout) slidingView).isExpanded())

@@ -15,6 +15,6 @@ the License.
 -->
 <resources>
 
-    <string name="app_name">PiDY Android Widget Sample</string>
+    <string name="app_name">SlidingLayout Sample</string>
 
 </resources>

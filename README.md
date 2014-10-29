@@ -1,4 +1,4 @@
-PiDyGBAndroidWidget
+android-slidinglayout
 ===============
 
 ### Download
@@ -8,15 +8,15 @@ Clone the repository and import as Android Library in eclipse or grab via maven 
 ##### Maven
 ```xml
 <dependency>
-    <groupId>com.github.pidygb.android</groupId>
-    <artifactId>pidygbandroid</artifactId>
+    <groupId>com.github.pidygb</groupId>
+    <artifactId>slidinglayout</artifactId>
     <version>(insert latest version)</version>
 </dependency>
 ```
 ##### Gradle
 ```groovy
 dependencies {
-   compile 'com.github.pidygb.android:pidygbandroid:+'
+   compile 'com.github.pidygb:slidinglayout:+'
 }
 ```
 ### Usage
@@ -28,21 +28,21 @@ dependencies {
 Use the following layouts in your xml.
 
 ```xml
-<com.github.pidygb.android.widget.SlidingLayout
+<com.github.pidygb.slidinglayout.widget.SlidingLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:expanded="true|false"
     app:duration="300">
-</com.github.pidygb.android.widget.SlidingLayout>
+</com.github.pidygb.slidinglayout.widget.SlidingLayout>
 ```
 
 ```xml
-<com.github.pidygb.android.widget.SlidingLinearLayout
+<com.github.pidygb.slidinglayout.widget.SlidingLinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:expanded="true|false"
     app:duration="300">
-</com.github.pidygb.android.widget.SlidingLinearLayout>
+</com.github.pidygb.slidinglayout.widget.SlidingLinearLayout>
 ```
     
 ##### When:
@@ -67,40 +67,6 @@ new SlidingLinearLayout().setSlideListener(new SlideListener() {
     }
 });
 ```
-
-#### Views
-
-Use the following views in your xml:
-
-```xml
-<com.github.pidygb.android.widget.Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="text"
-    app:typeface="Ubuntu-Regular.ttf"
-    app:scaleLetterSpacing="2.5"
-    app:textUpperCase="true"/>
-
-<com.github.pidygb.android.widget.EditText
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:inputType="text"
-    app:typeface="Ubuntu-Regular.ttf"/>
-        
-<com.github.pidygb.android.widget.TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Ubuntu Regular font"
-    app:typeface="Ubuntu-Regular.ttf"
-    app:scaleLetterSpacing="2.5"
-    app:textUpperCase="true"/>
-```
-
-##### When:
-
-* `app:typeface` : A font file present in ***assets/fonts*** folder
-* `app:scaleLetterSpacing` : A scale factor for letter spacing
-* `app:textUpperCase` : force the text in uppercase
 
 ## License
 

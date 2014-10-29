@@ -13,10 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.pidygb.android.widget;
+package com.github.pidygb.slidinglayout.widget;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -24,41 +23,41 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
-import com.github.pidygb.android.R;
+import com.github.pidygb.slidinglayout.R;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 
 /**
- * A {@link android.widget.LinearLayout} version with sliding animation implementation
+ * @author pidy
  */
 @SuppressWarnings({"UnusedDeclaration", "NullableProblems"})
-public class SlidingLinearLayout extends LinearLayout {
+public class SlidingLayout extends FrameLayout {
 
+    protected int mExpandedHeight;
+    protected boolean isObserved = true;
     private int mDuration;
     private boolean mExpanded;
     private ViewGroup.LayoutParams mLayoutParams;
     private SlideListener mOnSlideListener;
-    private boolean isObserved = true;
-    private int mExpandedHeight;
     private boolean isAnimated;
     private boolean deliveryExpandOnGlobalLayoutFinished;
     private boolean deliveryCollapseOnGlobalLayoutFinished;
 
-    public SlidingLinearLayout(Context context) {
+    public SlidingLayout(Context context) {
         super(context);
+        parseAttrs(context, null);
     }
 
-    public SlidingLinearLayout(Context context, AttributeSet attrs) {
+    public SlidingLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         parseAttrs(context, attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public SlidingLinearLayout(Context context, AttributeSet attrs, int defStyle) {
+    public SlidingLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         parseAttrs(context, attrs);
     }
@@ -78,18 +77,7 @@ public class SlidingLinearLayout extends LinearLayout {
      * @param duration Duration in milliseconds
      */
     public void setDuration(int duration) {
-        mDuration = duration;
-    }
-
-    /**
-     * Binds an animation listener to this animation. The animation listener is
-     * notified of animation events such as the start of the animation or the
-     * end of the animation.
-     *
-     * @param listener the animation listener to be notified
-     */
-    public void setSlideListener(SlideListener listener) {
-        mOnSlideListener = listener;
+        this.mDuration = duration;
     }
 
     /**
@@ -107,8 +95,7 @@ public class SlidingLinearLayout extends LinearLayout {
      * @param expanded a {@link boolean}
      */
     public void setExpanded(boolean expanded) {
-        mExpanded = expanded;
-        isObserved = true;
+        this.mExpanded = expanded;
         invalidate();
         requestLayout();
     }
@@ -138,17 +125,61 @@ public class SlidingLinearLayout extends LinearLayout {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (isObserved && !mExpanded)
-            setMeasuredDimension(widthMeasureSpec, 0);
+    public void addView(View child) {
+        if (getChildCount() > 0) {
+            throw new IllegalStateException(
+                    "SlideLayout can host only one direct child");
+        }
+        super.addView(child);
+    }
+
+    @Override
+    public void addView(View child, int index) {
+        if (getChildCount() > 0) {
+            throw new IllegalStateException(
+                    "SlideLayout can host only one direct child");
+        }
+        super.addView(child, index);
+    }
+
+    @Override
+    public void addView(View child, int width, int height) {
+        if (getChildCount() > 0) {
+            throw new IllegalStateException(
+                    "SlideLayout can host only one direct child");
+        }
+        super.addView(child, width, height);
+    }
+
+    @Override
+    public void addView(View child, ViewGroup.LayoutParams params) {
+        if (getChildCount() > 0) {
+            throw new IllegalStateException(
+                    "SlideLayout can host only one direct child");
+        }
+        super.addView(child, params);
     }
 
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
+        if (getChildCount() > 0) {
+            throw new IllegalStateException(
+                    "SlideLayout can host only one direct child");
+        }
         isObserved = true;
         setupObserver();
         super.addView(child, index, params);
+    }
+
+    /**
+     * Binds an animation listener to this animation. The animation listener is
+     * notified of animation events such as the start of the animation or the
+     * end of the animation.
+     *
+     * @param listener the animation listener to be notified
+     */
+    public void setSlideListener(SlideListener listener) {
+        mOnSlideListener = listener;
     }
 
     /**
@@ -159,8 +190,112 @@ public class SlidingLinearLayout extends LinearLayout {
             return;
         if (mExpanded)
             collapse();
-        else
+        else {
             expand();
+        }
+    }
+
+    /**
+     * Collapse the view with a sliding animation if it's not already collapsed
+     */
+    public void collapse() {
+        if (isObserved && !deliveryExpandOnGlobalLayoutFinished) {
+            deliveryCollapseOnGlobalLayoutFinished = true;
+            return;
+        }
+        if (mExpandedHeight == 0 || isAnimated)
+            return;
+        isAnimated = true;
+        mExpanded = !mExpanded;
+        measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(
+                Math.max(mExpandedHeight, getMeasuredHeight()), 0);
+        valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams lp = getLayoutParams();
+                lp.height = val;
+                setLayoutParams(lp);
+            }
+        });
+
+        valueAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                if (mOnSlideListener != null)
+                    mOnSlideListener.onSlideStart(SlidingLayout.this);
+                mLayoutParams.height = -2;
+                setLayoutParams(mLayoutParams);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setVisibility(GONE);
+                if (mOnSlideListener != null)
+                    mOnSlideListener.onSlideEnd(SlidingLayout.this);
+                isAnimated = false;
+            }
+        });
+        valueAnimator.setDuration(mDuration);
+        valueAnimator.start();
+    }
+
+    /**
+     * Expand the view with a sliding animation if it's not already expanded
+     */
+    public void expand() {
+        if (isObserved && !deliveryCollapseOnGlobalLayoutFinished) {
+            deliveryExpandOnGlobalLayoutFinished = true;
+            return;
+        }
+        if (mExpandedHeight == 0 || isAnimated)
+            return;
+        isAnimated = true;
+        mExpanded = !mExpanded;
+        measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0,
+                Math.max(mExpandedHeight, getMeasuredHeight()));
+        valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams lp = getLayoutParams();
+                lp.height = val;
+                setLayoutParams(lp);
+            }
+        });
+
+        valueAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                if (mOnSlideListener != null)
+                    mOnSlideListener.onSlideStart(SlidingLayout.this);
+                setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLayoutParams.height = -2;
+                setLayoutParams(mLayoutParams);
+                if (mOnSlideListener != null)
+                    mOnSlideListener.onSlideEnd(SlidingLayout.this);
+                isAnimated = false;
+            }
+        });
+        valueAnimator.setDuration(mDuration);
+        valueAnimator.start();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (isObserved && !mExpanded)
+            setMeasuredDimension(widthMeasureSpec, 0);
     }
 
     private void setupObserver() {
@@ -172,8 +307,13 @@ public class SlidingLinearLayout extends LinearLayout {
                     @SuppressWarnings("deprecation")
                     @Override
                     public void onGlobalLayout() {
-                        mExpandedHeight = getChildrenHeight()
-                                + getPaddingBottom() + getPaddingTop();
+                        mExpandedHeight = getChildAt(0).getHeight()
+                                + getPaddingBottom()
+                                + getPaddingTop()
+                                + ((LayoutParams) getChildAt(0)
+                                .getLayoutParams()).bottomMargin
+                                + ((LayoutParams) getChildAt(0)
+                                .getLayoutParams()).topMargin;
                         if (!mExpanded)
                             setVisibility(GONE);
 
@@ -198,121 +338,15 @@ public class SlidingLinearLayout extends LinearLayout {
         );
     }
 
-    private int getChildrenHeight() {
-        int t = 0;
-        for (int i = 0; i < getChildCount(); i++) {
-            t += getChildAt(i).getHeight()
-                    + ((LayoutParams) getChildAt(i).getLayoutParams()).bottomMargin
-                    + ((LayoutParams) getChildAt(i).getLayoutParams()).topMargin;
-        }
-        return t;
-    }
-
     private void parseAttrs(Context context, AttributeSet attrs) {
+
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-                R.styleable.SlidingLinearLayout, 0, 0);
+                R.styleable.SlidingLayout, 0, 0);
         try {
-            mDuration = a.getInteger(R.styleable.SlidingLinearLayout_duration,
-                    300);
-            mExpanded = a.getBoolean(R.styleable.SlidingLinearLayout_expanded,
-                    false);
+            mDuration = a.getInteger(R.styleable.SlidingLayout_duration, 300);
+            mExpanded = a.getBoolean(R.styleable.SlidingLayout_expanded, false);
         } finally {
             a.recycle();
         }
-    }
-
-    /**
-     * Collapse the view with a sliding animation if it's not already collapsed
-     */
-    public void collapse() {
-        if (isObserved && !deliveryExpandOnGlobalLayoutFinished) {
-            deliveryCollapseOnGlobalLayoutFinished = true;
-            return;
-        }
-        if (mExpandedHeight == 0 || isAnimated)
-            return;
-        isAnimated = true;
-        mExpanded = !mExpanded;
-
-        measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(Math.max(mExpandedHeight, getMeasuredHeight()), 0);
-        valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                int val = (Integer) valueAnimator.getAnimatedValue();
-                ViewGroup.LayoutParams lp = getLayoutParams();
-                lp.height = val;
-                setLayoutParams(lp);
-            }
-        });
-
-        valueAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                if (mOnSlideListener != null)
-                    mOnSlideListener.onSlideStart(SlidingLinearLayout.this);
-                mLayoutParams.height = -2;
-                setLayoutParams(mLayoutParams);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                setVisibility(GONE);
-                if (mOnSlideListener != null)
-                    mOnSlideListener.onSlideEnd(SlidingLinearLayout.this);
-                isAnimated = false;
-            }
-        });
-        valueAnimator.setDuration(mDuration);
-        valueAnimator.start();
-    }
-
-    /**
-     * Expand the view with a sliding animation if it's not already expanded
-     */
-    public void expand() {
-        if (isObserved && !deliveryCollapseOnGlobalLayoutFinished) {
-            deliveryExpandOnGlobalLayoutFinished = true;
-            return;
-        }
-        if (mExpandedHeight == 0 || isAnimated)
-            return;
-        isAnimated = true;
-        mExpanded = !mExpanded;
-
-        measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, Math.max(mExpandedHeight, getMeasuredHeight()));
-        valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                int val = (Integer) valueAnimator.getAnimatedValue();
-                ViewGroup.LayoutParams lp = getLayoutParams();
-                lp.height = val;
-                requestLayout();
-                // setLayoutParams(lp);
-            }
-        });
-
-        valueAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                if (mOnSlideListener != null)
-                    mOnSlideListener.onSlideStart(SlidingLinearLayout.this);
-                setVisibility(VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mLayoutParams.height = -2;
-                setLayoutParams(mLayoutParams);
-                if (mOnSlideListener != null)
-                    mOnSlideListener.onSlideEnd(SlidingLinearLayout.this);
-                isAnimated = false;
-            }
-        });
-        valueAnimator.setDuration(mDuration);
-        valueAnimator.start();
     }
 }

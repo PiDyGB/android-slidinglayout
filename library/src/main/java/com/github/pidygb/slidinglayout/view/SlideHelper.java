@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.pidygb.android.view;
+package com.github.pidygb.slidinglayout.view;
 
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
