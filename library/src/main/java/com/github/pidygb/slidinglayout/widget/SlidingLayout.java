@@ -96,6 +96,7 @@ public class SlidingLayout extends FrameLayout {
      */
     public void setExpanded(boolean expanded) {
         this.mExpanded = expanded;
+        isObserved = true;
         invalidate();
         requestLayout();
     }
