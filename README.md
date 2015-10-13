@@ -32,7 +32,7 @@ Use the following layouts in your xml.
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:slide_expanded="true|false"
-    app:slide_duration="300">
+    app:sliding_duration="300">
 </com.github.pidygb.slidinglayout.widget.SlidingLayout>
 ```
 
@@ -41,14 +41,14 @@ Use the following layouts in your xml.
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:slide_expanded="true|false"
-    app:slide_duration="300">
+    app:sliding_duration="300">
 </com.github.pidygb.slidinglayout.widget.SlidingLinearLayout>
 ```
     
 ##### When:
 
 * `app:slide_expanded` : if the start status of the layout is expanded or not
-* `app:slide_duration` : the animation duration in millis
+* `app:sliding_duration` : the animation duration in millis
 
 Fill these layouts with your Views via xml or programmatically
 
