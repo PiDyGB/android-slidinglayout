@@ -31,8 +31,8 @@ Use the following layouts in your xml.
 <com.github.pidygb.slidinglayout.widget.SlidingLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:expanded="true|false"
-    app:duration="300">
+    app:slide_expanded="true|false"
+    app:slide_duration="300">
 </com.github.pidygb.slidinglayout.widget.SlidingLayout>
 ```
 
@@ -40,15 +40,15 @@ Use the following layouts in your xml.
 <com.github.pidygb.slidinglayout.widget.SlidingLinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:expanded="true|false"
-    app:duration="300">
+    app:slide_expanded="true|false"
+    app:slide_duration="300">
 </com.github.pidygb.slidinglayout.widget.SlidingLinearLayout>
 ```
     
 ##### When:
 
-* `app:expanded` : if the start status of the layout is expanded or not
-* `app:duration` : the animation duration in millis
+* `app:slide_expanded` : if the start status of the layout is expanded or not
+* `app:slide_duration` : the animation duration in millis
 
 Fill these layouts with your Views via xml or programmatically
 

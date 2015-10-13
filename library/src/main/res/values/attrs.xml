@@ -15,16 +15,16 @@ the License.
 -->
 <resources>
 
-    <attr name="duration" format="integer" />
-    <attr name="expanded" format="boolean" />
+    <attr name="sliding_duration" format="integer" />
+    <attr name="slide_expanded" format="boolean" />
 
     <declare-styleable name="SlidingLinearLayout">
-        <attr name="duration" />
-        <attr name="expanded" />
+        <attr name="sliding_duration" />
+        <attr name="slide_expanded" />
     </declare-styleable>
     <declare-styleable name="SlidingLayout">
-        <attr name="duration" />
-        <attr name="expanded" />
+        <attr name="sliding_duration" />
+        <attr name="slide_expanded" />
     </declare-styleable>
 
 </resources>

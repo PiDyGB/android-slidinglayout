@@ -344,8 +344,8 @@ public class SlidingLayout extends FrameLayout {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.SlidingLayout, 0, 0);
         try {
-            mDuration = a.getInteger(R.styleable.SlidingLayout_duration, 300);
-            mExpanded = a.getBoolean(R.styleable.SlidingLayout_expanded, false);
+            mDuration = a.getInteger(R.styleable.SlidingLayout_sliding_duration, 300);
+            mExpanded = a.getBoolean(R.styleable.SlidingLayout_slide_expanded, false);
         } finally {
             a.recycle();
         }

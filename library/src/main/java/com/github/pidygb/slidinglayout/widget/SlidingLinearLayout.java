@@ -212,9 +212,9 @@ public class SlidingLinearLayout extends LinearLayout {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.SlidingLinearLayout, 0, 0);
         try {
-            mDuration = a.getInteger(R.styleable.SlidingLinearLayout_duration,
+            mDuration = a.getInteger(R.styleable.SlidingLinearLayout_sliding_duration,
                     300);
-            mExpanded = a.getBoolean(R.styleable.SlidingLinearLayout_expanded,
+            mExpanded = a.getBoolean(R.styleable.SlidingLinearLayout_slide_expanded,
                     false);
         } finally {
             a.recycle();

@@ -1,0 +1,20 @@
+language: android
+android:
+  components:
+  - build-tools-23.0.1
+  - android-23
+  - extra-android-m2repository
+script: "./gradlew assemble"
+after_success:
+  - mv libray/build/outputs/aar/libray-release.aar android-slidinglayout-`git tag | tail -n 1`.aar
+  - mv sample/build/outputs/apk/sample-debug.apk android-slidinglayout-sample-`git tag | tail -n 1`.apk
+deploy:
+  provider: releases
+  api_key:
+    secure: CfUz/wNBTVvC4U/1b8NsfG8ad0fWbbyr/LY8LUrDB7SzStgA9Kkxt62fahHCYppsQTTVNcsNtFjFlDYfVqedpUi/eZHhHYhPD3mKgEVJIuRx75IL1uS3O/1KQN6/tkSU4WNcTnuzhkXQ+yBYAGBG5J6wt2twRVuvzfPGHDEWpVRcZcND06OnW5c2HB6gA8ivM+RfE9NQ/A3LcqeRcebCGJkfrEeyYINcNZKhkAun3u7n+Y/vI5zUyOlR7V/iAeOaG1jmankC2PK+B1T/O74uF6SQE/nuzEaz762H6f9zQ7x1HlpoSNUZfCzGLGHxM7gBlHHFQiEkOHsT0zxiJVvhJN9H2zrH5hyO7GKLQGwni2CtYl10u8q5K0+HbHYsvANEh1D5UL/Z9JFQuXQpoMxPKN4CSnlqmJwK19h+zrSx1VAqaht0P2FSBBINLozXVMlHMS4o9YKc6N6LYZlLqneoLueC6pbaFp1fMuj+RVzkxGCoVfhUbwfNJ0m3gMgMPClWui2O1P0Qt9rG5WXn0JiuRIAwUuSF/dzUCVsZLLz9acKDDqkWCMSEJp9KZPSKsQxqFn4d6OZhOh/cf5V59A5W5H5fg5J2ybMh+Rj79Z8y2qs17KCcmnG7wJi5CkGhqoDrOBaDcEyjmSOVpntqiT2oj1WLebBGaTOkW1m/3YPiXuM=
+  file:
+    - "android-slidinglayout-`git tag | tail -n 1`.aar"
+    - "android-slidinglayout-sample-`git tag | tail -n 1`.apk"
+  skip_cleanup: true
+  on:
+    tags: true
