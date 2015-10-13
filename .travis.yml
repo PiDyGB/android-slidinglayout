@@ -6,7 +6,7 @@ android:
   - extra-android-m2repository
 script: "./gradlew assemble"
 after_success:
-  - mv libray/build/outputs/aar/libray-release.aar android-slidinglayout-`git tag | tail -n 1`.aar
+  - mv library/build/outputs/aar/library-release.aar android-slidinglayout-`git tag | tail -n 1`.aar
   - mv sample/build/outputs/apk/sample-debug.apk android-slidinglayout-sample-`git tag | tail -n 1`.apk
 deploy:
   provider: releases
