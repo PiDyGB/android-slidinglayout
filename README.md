@@ -1,4 +1,4 @@
-android-slidinglayout
+android-slidinglayout   [![Build Status](https://travis-ci.org/PiDyGB/android-slidinglayout.svg?branch=master)](https://travis-ci.org/PiDyGB/android-slidinglayout)
 ===============
 
 ### Download
