@@ -16,4 +16,5 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
 }
 
-apply from: 'https://raw.githubusercontent.com/PiDyGB/gradle-mvn-push/master/gradle-mvn-push.gradle'
+apply from: 'https://raw.githubusercontent.com/PiDyGB/gradle-bintray-push/master/gradle-bintray-push.gradle'
+
